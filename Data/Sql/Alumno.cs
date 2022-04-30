@@ -9,7 +9,14 @@ namespace ETL.Data.Sql
     {
         public Alumno()
         {
+            BecaAlumno = new HashSet<BecaAlumno>();
+            Becaalubitacora = new HashSet<Becaalubitacora>();
+            Convenios = new HashSet<Convenios>();
+            CuentasPorCobrar = new HashSet<CuentasPorCobrar>();
+            DocumentoAlumno = new HashSet<DocumentoAlumno>();
+            FaltasClase = new HashSet<FaltasClase>();
             GeneralesAlumno = new HashSet<GeneralesAlumno>();
+            Referencias = new HashSet<Referencias>();
         }
 
         public long AlId { get; set; }
@@ -24,7 +31,7 @@ namespace ETL.Data.Sql
         public int AlStatusActual { get; set; }
         public int? AlCarrera { get; set; }
         public int AlAnoPeriodoActual { get; set; }
-        public int AlEsquemaPagoActual { get; set; }
+        public int? AlEsquemaPagoActual { get; set; }
         public int AlBecaActual { get; set; }
         public int AlBecaParcialidad { get; set; }
         public bool AlDocumentos { get; set; }
@@ -41,7 +48,18 @@ namespace ETL.Data.Sql
         public int? AlSemestre { get; set; }
 
         public virtual Carreras AlCarreraNavigation { get; set; }
+        public virtual EsquemaPago AlEsquemaPagoActualNavigation { get; set; }
+        public virtual Modalidades AlModalidadActualNavigation { get; set; }
+        public virtual Periodos AlPeriodoActualNavigation { get; set; }
         public virtual EstatusList AlStatusActualNavigation { get; set; }
+        public virtual StatusHistorial StatusHistorial { get; set; }
+        public virtual ICollection<BecaAlumno> BecaAlumno { get; set; }
+        public virtual ICollection<Becaalubitacora> Becaalubitacora { get; set; }
+        public virtual ICollection<Convenios> Convenios { get; set; }
+        public virtual ICollection<CuentasPorCobrar> CuentasPorCobrar { get; set; }
+        public virtual ICollection<DocumentoAlumno> DocumentoAlumno { get; set; }
+        public virtual ICollection<FaltasClase> FaltasClase { get; set; }
         public virtual ICollection<GeneralesAlumno> GeneralesAlumno { get; set; }
+        public virtual ICollection<Referencias> Referencias { get; set; }
     }
 }

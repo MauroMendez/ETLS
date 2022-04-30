@@ -7,6 +7,12 @@ namespace ETL.Data.Sql
 {
     public partial class Becas
     {
+        public Becas()
+        {
+            BecaAlumno = new HashSet<BecaAlumno>();
+            Becaalubitacora = new HashSet<Becaalubitacora>();
+        }
+
         public int BecasId { get; set; }
         public string BecasClave { get; set; }
         public string BecasNombre { get; set; }
@@ -17,5 +23,10 @@ namespace ETL.Data.Sql
         public int? CategoriaId { get; set; }
         public int? ConId { get; set; }
         public bool BecasProm { get; set; }
+
+        public virtual Categoriabeca Categoria { get; set; }
+        public virtual CatalogoConceptos Con { get; set; }
+        public virtual ICollection<BecaAlumno> BecaAlumno { get; set; }
+        public virtual ICollection<Becaalubitacora> Becaalubitacora { get; set; }
     }
 }

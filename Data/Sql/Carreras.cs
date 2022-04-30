@@ -10,6 +10,8 @@ namespace ETL.Data.Sql
         public Carreras()
         {
             Alumno = new HashSet<Alumno>();
+            GeneralesProspecto = new HashSet<GeneralesProspecto>();
+            ListaPrecios = new HashSet<ListaPrecios>();
         }
 
         public int Idcarrera { get; set; }
@@ -31,6 +33,13 @@ namespace ETL.Data.Sql
         public int? NivelId { get; set; }
         public int? TempId { get; set; }
 
+        public virtual Facultades FacFacultad { get; set; }
+        public virtual Modalidades ModModalidad { get; set; }
+        public virtual Niveles Nivel { get; set; }
+        public virtual PlanesEstudio Pe { get; set; }
+        public virtual Usuario Usu { get; set; }
         public virtual ICollection<Alumno> Alumno { get; set; }
+        public virtual ICollection<GeneralesProspecto> GeneralesProspecto { get; set; }
+        public virtual ICollection<ListaPrecios> ListaPrecios { get; set; }
     }
 }

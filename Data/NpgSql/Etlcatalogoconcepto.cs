@@ -5,11 +5,9 @@ using System.Collections.Generic;
 
 namespace ETL.Data.NpgSql
 {
-    public partial class Tcarrera
+    public partial class Etlcatalogoconcepto
     {
-        public int Carid { get; set; }
-        public string Carclave { get; set; }
-        public string Carnombre { get; set; }
-        public long Areid { get; set; }
+        public string Cptipodoc { get; set; }
+        public string Cpconcepto { get; set; }
     }
 }

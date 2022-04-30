@@ -13,498 +13,136 @@ namespace ETL.Data.NpgSql
         {
         }
 
-        public NpgSql_Context(DbContextOptions<NpgSql_Context> options)
-            : base(options)
-        {
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(@"Server = interpue.com.mx; Port = 5435; Database = InterERP; User Id = pruebas; Password = Root.inter19!; Trust Server Certificate=true; Include Error Detail = true;");
         }
 
-        public virtual DbSet<Taalumnoconexion> Taalumnoconexion { get; set; }
-        public virtual DbSet<Talumno> Talumno { get; set; }
-        public virtual DbSet<Talumnoestatus> Talumnoestatus { get; set; }
-        public virtual DbSet<Tcarrera> Tcarrera { get; set; }
-        public virtual DbSet<Tcodigo> Tcodigo { get; set; }
-        public virtual DbSet<Tcrm> Tcrm { get; set; }
+
+        public NpgSql_Context(DbContextOptions<NpgSql_Context> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<Cclistapreciosconcepto> Cclistapreciosconcepto { get; set; }
+        public virtual DbSet<Etlalumno> Etlalumno { get; set; }
+        public virtual DbSet<Etlcatalogoconcepto> Etlcatalogoconcepto { get; set; }
+        public virtual DbSet<Etlcuentasdetalle> Etlcuentasdetalle { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("dblink");
 
-            modelBuilder.Entity<Taalumnoconexion>(entity =>
+            modelBuilder.Entity<Cclistapreciosconcepto>(entity =>
             {
-                entity.HasKey(e => new { e.Aluid, e.Aacfid })
-                    .HasName("taalumnoconexion_pkey");
+                entity.HasKey(e => new { e.Lpdivisionid, e.Lpconceptocon })
+                    .HasName("cclistapreciosconcepto_pkey");
 
-                entity.ToTable("taalumnoconexion");
+                entity.ToTable("cclistapreciosconcepto");
 
-                entity.HasIndex(e => e.Acarid, "taalumnoconexion_acarid_idx");
+                entity.HasIndex(e => e.Companiaid, "cclistapreciosconcepto_companiaid_idx");
 
-                entity.Property(e => e.Aluid).HasColumnName("aluid");
+                entity.HasIndex(e => e.Fecvenid, "cclistapreciosconcepto_fecvenid_idx");
 
-                entity.Property(e => e.Aacfid).HasColumnName("aacfid");
+                entity.Property(e => e.Lpdivisionid)
+                    .HasMaxLength(5)
+                    .HasColumnName("lpdivisionid")
+                    .IsFixedLength();
 
-                entity.Property(e => e.Aacfacusado).HasColumnName("aacfacusado");
+                entity.Property(e => e.Lpconceptocon).HasColumnName("lpconceptocon");
 
-                entity.Property(e => e.Aacfalergias)
-                    .HasMaxLength(40)
-                    .HasColumnName("aacfalergias")
+                entity.Property(e => e.Companiaid)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .HasColumnName("companiaid")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Fecvenid)
+                    .HasMaxLength(10)
+                    .HasColumnName("fecvenid")
                     .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
-                entity.Property(e => e.Aacfamaternocont)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfamaternocont")
+                entity.Property(e => e.Lpconceptodes)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("lpconceptodes")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Lpconceptofecfin).HasColumnName("lpconceptofecfin");
+
+                entity.Property(e => e.Lpconceptofecini).HasColumnName("lpconceptofecini");
+
+                entity.Property(e => e.Lpconceptogeneracion)
+                    .HasMaxLength(4)
+                    .HasColumnName("lpconceptogeneracion")
                     .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
-                entity.Property(e => e.Aacfamunicipiocont)
-                    .HasMaxLength(150)
-                    .HasColumnName("aacfamunicipiocont")
-                    .HasDefaultValueSql("NULL::bpchar")
+                entity.Property(e => e.Lpconceptogrupo)
+                    .HasMaxLength(1)
+                    .HasColumnName("lpconceptogrupo")
+                    .HasDefaultValueSql("NULL::bpchar");
+
+                entity.Property(e => e.Lpconceptoid)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .HasColumnName("lpconceptoid")
                     .IsFixedLength();
 
-                entity.Property(e => e.Aacfapaternocont)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfapaternocont")
+                entity.Property(e => e.Lpconceptoprecio)
+                    .HasPrecision(9, 2)
+                    .HasColumnName("lpconceptoprecio");
+
+                entity.Property(e => e.Varianteid)
+                    .HasMaxLength(10)
+                    .HasColumnName("varianteid")
                     .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
+            });
+
+            modelBuilder.Entity<Etlalumno>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("etlalumno");
 
                 entity.Property(e => e.Aacfapellidom)
                     .HasMaxLength(50)
                     .HasColumnName("aacfapellidom")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Aacfapellidop)
                     .HasMaxLength(50)
                     .HasColumnName("aacfapellidop")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
-
-                entity.Property(e => e.Aacfbachcert).HasColumnName("aacfbachcert");
-
-                entity.Property(e => e.Aacfbachedo)
-                    .HasMaxLength(50)
-                    .HasColumnName("aacfbachedo")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfbachfin).HasColumnName("aacfbachfin");
-
-                entity.Property(e => e.Aacfbachiller)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfbachiller")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfbachinicio).HasColumnName("aacfbachinicio");
-
-                entity.Property(e => e.Aacfbachlugar)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfbachlugar")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfbachpais)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacfbachpais")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfbachprom)
-                    .HasPrecision(5, 2)
-                    .HasColumnName("aacfbachprom");
-
-                entity.Property(e => e.Aacfcallenum)
-                    .HasMaxLength(80)
-                    .HasColumnName("aacfcallenum")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfcallenumcont)
-                    .HasMaxLength(120)
-                    .HasColumnName("aacfcallenumcont")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfcedula).HasColumnName("aacfcedula");
-
-                entity.Property(e => e.Aacfcertificado)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacfcertificado")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfcolonia)
-                    .HasMaxLength(120)
-                    .HasColumnName("aacfcolonia")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfcoloniacont)
-                    .HasMaxLength(120)
-                    .HasColumnName("aacfcoloniacont")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfcomentarios)
-                    .HasMaxLength(50)
-                    .HasColumnName("aacfcomentarios")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfcurp)
-                    .HasMaxLength(18)
-                    .HasColumnName("aacfcurp")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfedocont)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacfedocont")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfegreanio).HasColumnName("aacfegreanio");
-
-                entity.Property(e => e.Aacfegreperiodo).HasColumnName("aacfegreperiodo");
-
-                entity.Property(e => e.Aacfegresado)
-                    .HasColumnName("aacfegresado")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Aacfequimat).HasColumnName("aacfequimat");
-
-                entity.Property(e => e.Aacfestado)
-                    .HasMaxLength(50)
-                    .HasColumnName("aacfestado")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfextranjero)
-                    .HasMaxLength(5)
-                    .HasColumnName("aacfextranjero")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacffacebook)
-                    .HasMaxLength(120)
-                    .HasColumnName("aacffacebook")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacffb)
-                    .HasMaxLength(60)
-                    .HasColumnName("aacffb")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacffechanact).HasColumnName("aacffechanact");
-
-                entity.Property(e => e.Aacffechatitulacion).HasColumnName("aacffechatitulacion");
-
-                entity.Property(e => e.Aacffoja)
-                    .HasMaxLength(5)
-                    .HasColumnName("aacffoja")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacffojao)
-                    .HasMaxLength(5)
-                    .HasColumnName("aacffojao")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfgradoest).HasColumnName("aacfgradoest");
-
-                entity.Property(e => e.Aacfhoratitulacion).HasColumnName("aacfhoratitulacion");
 
                 entity.Property(e => e.Aacfmail)
                     .HasMaxLength(150)
                     .HasColumnName("aacfmail")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfmailt)
-                    .HasMaxLength(150)
-                    .HasColumnName("aacfmailt")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfmunicipio)
-                    .HasMaxLength(120)
-                    .HasColumnName("aacfmunicipio")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfnacionalidad)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfnacionalidad")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfnia)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacfnia")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfnolibro)
-                    .HasMaxLength(5)
-                    .HasColumnName("aacfnolibro")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfnolibroo)
-                    .HasMaxLength(5)
-                    .HasColumnName("aacfnolibroo")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfnombrecont)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfnombrecont")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Aacfnomtutor)
                     .HasMaxLength(50)
                     .HasColumnName("aacfnomtutor")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
-
-                entity.Property(e => e.Aacforiginario)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacforiginario")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfoto).HasColumnName("aacfoto");
-
-                entity.Property(e => e.AacfotoGxi)
-                    .HasMaxLength(2048)
-                    .HasColumnName("aacfoto_gxi")
-                    .HasDefaultValueSql("NULL::character varying");
-
-                entity.Property(e => e.Aacfpadecimientos)
-                    .HasMaxLength(50)
-                    .HasColumnName("aacfpadecimientos")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfparentescocont)
-                    .HasMaxLength(30)
-                    .HasColumnName("aacfparentescocont")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfreligion)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacfreligion")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfresidente)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfresidente")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfsecedo)
-                    .HasMaxLength(50)
-                    .HasColumnName("aacfsecedo")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfseclugar)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfseclugar")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfsecundaria)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfsecundaria")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfseguro)
-                    .HasMaxLength(60)
-                    .HasColumnName("aacfseguro")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfsuspendido).HasColumnName("aacfsuspendido");
 
                 entity.Property(e => e.Aacftelefono)
                     .HasMaxLength(150)
                     .HasColumnName("aacftelefono")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacftelefonoc)
-                    .HasMaxLength(80)
-                    .HasColumnName("aacftelefonoc")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacftelefonocont)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacftelefonocont")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Aacftelefonot)
                     .HasMaxLength(25)
                     .HasColumnName("aacftelefonot")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
-
-                entity.Property(e => e.Aacftiposangre)
-                    .HasMaxLength(20)
-                    .HasColumnName("aacftiposangre")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacftipotitulacion)
-                    .HasMaxLength(60)
-                    .HasColumnName("aacftipotitulacion");
-
-                entity.Property(e => e.Aacftitulado)
-                    .HasColumnName("aacftitulado")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Aacftituladoanio)
-                    .HasColumnName("aacftituladoanio")
-                    .HasComment("\n");
-
-                entity.Property(e => e.Aacftituladoperiodo).HasColumnName("aacftituladoperiodo");
-
-                entity.Property(e => e.Aacftitulotesis)
-                    .HasMaxLength(220)
-                    .HasColumnName("aacftitulotesis")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacftwitter)
-                    .HasMaxLength(120)
-                    .HasColumnName("aacftwitter")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacfunirev)
-                    .HasMaxLength(100)
-                    .HasColumnName("aacfunirev")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aacgrupo)
-                    .HasMaxLength(1)
-                    .HasColumnName("aacgrupo");
-
-                entity.Property(e => e.Aacmodalidad).HasColumnName("aacmodalidad");
 
                 entity.Property(e => e.Aacsemestreactual).HasColumnName("aacsemestreactual");
 
-                entity.Property(e => e.Aacsemestregrupo)
-                    .HasMaxLength(1)
-                    .HasColumnName("aacsemestregrupo")
-                    .HasDefaultValueSql("NULL::bpchar");
-
                 entity.Property(e => e.Acarid)
-                    .IsRequired()
                     .HasMaxLength(20)
                     .HasColumnName("acarid")
-                    .IsFixedLength();
-            });
-
-            modelBuilder.Entity<Talumno>(entity =>
-            {
-                entity.HasKey(e => e.Aluid)
-                    .HasName("talumno_pkey");
-
-                entity.ToTable("talumno");
-
-                entity.HasIndex(e => e.Aluestatusid, "talumno_aluestatusid_idx");
-
-                entity.HasIndex(e => e.Tpaident, "talumno_tpaident_idx");
-
-                entity.Property(e => e.Aluid)
-                    .ValueGeneratedNever()
-                    .HasColumnName("aluid");
-
-                entity.Property(e => e.Aluactivo).HasColumnName("aluactivo");
-
-                entity.Property(e => e.Aluadeudo).HasColumnName("aluadeudo");
-
-                entity.Property(e => e.Alucbravisosmor).HasColumnName("alucbravisosmor");
-
-                entity.Property(e => e.Alucbrenviocta)
-                    .HasMaxLength(1)
-                    .HasColumnName("alucbrenviocta")
-                    .HasDefaultValueSql("NULL::bpchar");
-
-                entity.Property(e => e.Alucbrmorozidad).HasColumnName("alucbrmorozidad");
-
-                entity.Property(e => e.Alucbrpedo).HasColumnName("alucbrpedo");
-
-                entity.Property(e => e.Alucbrpolitica)
-                    .HasMaxLength(5)
-                    .HasColumnName("alucbrpolitica")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alucbrreporte).HasColumnName("alucbrreporte");
-
-                entity.Property(e => e.Aluciudadnac)
-                    .HasMaxLength(100)
-                    .HasColumnName("aluciudadnac")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alucompany).HasColumnName("alucompany");
-
-                entity.Property(e => e.Alucp)
-                    .HasMaxLength(50)
-                    .HasColumnName("alucp")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alucredfnreview)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("alucredfnreview");
-
-                entity.Property(e => e.Alucredfopen)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("alucredfopen");
-
-                entity.Property(e => e.Alucredfreview)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("alucredfreview");
-
-                entity.Property(e => e.Alucredlim)
-                    .HasPrecision(17, 2)
-                    .HasColumnName("alucredlim")
-                    .HasDefaultValueSql("60000");
-
-                entity.Property(e => e.Alucredmsg)
-                    .HasMaxLength(3)
-                    .HasColumnName("alucredmsg")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alucredmsgtmp)
-                    .HasMaxLength(3)
-                    .HasColumnName("alucredmsgtmp")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alucredopen)
-                    .HasMaxLength(50)
-                    .HasColumnName("alucredopen")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alucredreview)
-                    .HasMaxLength(50)
-                    .HasColumnName("alucredreview")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aludivision)
-                    .HasMaxLength(5)
-                    .HasColumnName("aludivision")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aluescprocedencia)
-                    .HasMaxLength(50)
-                    .HasColumnName("aluescprocedencia")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Aluestado)
@@ -512,505 +150,133 @@ namespace ETL.Data.NpgSql
                     .HasColumnName("aluestado")
                     .IsFixedLength();
 
-                entity.Property(e => e.Aluestatusacademico)
-                    .HasColumnName("aluestatusacademico")
-                    .HasDefaultValueSql("1")
-                    .HasComment("Estatus AcadÃÂ©mico para Kardex\n\n***  1 Regular\n***  2 Irregular");
-
-                entity.Property(e => e.Aluestatusid).HasColumnName("aluestatusid");
-
-                entity.Property(e => e.Alufac).HasColumnName("alufac");
-
-                entity.Property(e => e.Alufacdir)
-                    .HasMaxLength(200)
-                    .HasColumnName("alufacdir")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alufacemail)
-                    .HasMaxLength(40)
-                    .HasColumnName("alufacemail")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alufacfechareg).HasColumnName("alufacfechareg");
-
-                entity.Property(e => e.Alufachorareg).HasColumnName("alufachorareg");
-
-                entity.Property(e => e.Alufacrazons)
-                    .HasMaxLength(50)
-                    .HasColumnName("alufacrazons")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alufacrfc)
-                    .HasMaxLength(20)
-                    .HasColumnName("alufacrfc")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alufacsolicitud).HasColumnName("alufacsolicitud");
-
-                entity.Property(e => e.Alufactipo).HasColumnName("alufactipo");
-
-                entity.Property(e => e.Alufacusuid)
-                    .HasPrecision(18)
-                    .HasColumnName("alufacusuid");
-
-                entity.Property(e => e.Alufacverificacion)
-                    .HasPrecision(1)
-                    .HasColumnName("alufacverificacion");
-
-                entity.Property(e => e.Alugeneracion)
-                    .HasMaxLength(2)
-                    .HasColumnName("alugeneracion")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alugeneracta)
-                    .HasColumnName("alugeneracta")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Aluimporte)
-                    .HasPrecision(17, 2)
-                    .HasColumnName("aluimporte")
-                    .HasDefaultValueSql("NULL::numeric");
-
-                entity.Property(e => e.Aluingresot)
-                    .HasPrecision(9, 2)
-                    .HasColumnName("aluingresot");
-
-                entity.Property(e => e.Aluinspago)
-                    .HasMaxLength(3)
-                    .HasColumnName("aluinspago")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aluintereses).HasColumnName("aluintereses");
-
-                entity.Property(e => e.Alulocalidad)
-                    .HasMaxLength(250)
-                    .HasColumnName("alulocalidad")
-                    .IsFixedLength();
-
                 entity.Property(e => e.Alumodalidad)
                     .HasMaxLength(10)
                     .HasColumnName("alumodalidad")
-                    .HasDefaultValueSql("'PRE'::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alumodfecha)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("alumodfecha");
-
-                entity.Property(e => e.Alumodhora)
-                    .HasMaxLength(8)
-                    .HasColumnName("alumodhora")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alumodprog)
-                    .HasMaxLength(128)
-                    .HasColumnName("alumodprog")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alumodusuario).HasColumnName("alumodusuario");
-
-                entity.Property(e => e.Alumunicipio2)
-                    .HasMaxLength(50)
-                    .HasColumnName("alumunicipio2")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alunoant)
-                    .HasMaxLength(20)
-                    .HasColumnName("alunoant")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Alunocontrol)
                     .HasMaxLength(20)
                     .HasColumnName("alunocontrol")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
-
-                entity.Property(e => e.Alunopro)
-                    .HasMaxLength(20)
-                    .HasColumnName("alunopro")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Alunovant)
-                    .HasMaxLength(1)
-                    .HasColumnName("alunovant")
-                    .HasDefaultValueSql("NULL::bpchar");
-
-                entity.Property(e => e.Alunoverifica)
-                    .HasMaxLength(1)
-                    .HasColumnName("alunoverifica")
-                    .HasDefaultValueSql("NULL::bpchar");
-
-                entity.Property(e => e.Alunovpro)
-                    .HasMaxLength(1)
-                    .HasColumnName("alunovpro")
-                    .HasDefaultValueSql("NULL::bpchar");
-
-                entity.Property(e => e.Aluocupaciont)
-                    .HasMaxLength(500)
-                    .HasColumnName("aluocupaciont");
 
                 entity.Property(e => e.Alureganio).HasColumnName("alureganio");
 
-                entity.Property(e => e.Aluregfecha)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("aluregfecha");
-
-                entity.Property(e => e.Alureghora)
-                    .HasMaxLength(8)
-                    .HasColumnName("alureghora")
-                    .IsFixedLength();
-
                 entity.Property(e => e.Aluregperiodo).HasColumnName("aluregperiodo");
 
-                entity.Property(e => e.Aluregprog)
-                    .HasMaxLength(128)
-                    .HasColumnName("aluregprog")
-                    .HasDefaultValueSql("NULL::bpchar")
+                entity.Property(e => e.Bcid)
+                    .HasMaxLength(20)
+                    .HasColumnName("bcid")
                     .IsFixedLength();
 
-                entity.Property(e => e.Aluregusuario).HasColumnName("aluregusuario");
+                entity.Property(e => e.Beid).HasColumnName("beid");
 
-                entity.Property(e => e.Aluresidencia)
-                    .HasMaxLength(250)
-                    .HasColumnName("aluresidencia")
-                    .IsFixedLength();
+                entity.Property(e => e.Beparcialidades)
+                    .HasPrecision(7, 3)
+                    .HasColumnName("beparcialidades");
 
-                entity.Property(e => e.Aluretenfac).HasColumnName("aluretenfac");
-
-                entity.Property(e => e.Alusexot)
-                    .HasMaxLength(1)
-                    .HasColumnName("alusexot");
-
-                entity.Property(e => e.Covid).HasColumnName("covid");
-
-                entity.Property(e => e.Tpaident)
-                    .HasMaxLength(10)
-                    .HasColumnName("tpaident")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-            });
-
-            modelBuilder.Entity<Talumnoestatus>(entity =>
-            {
-                entity.HasKey(e => e.Alueid)
-                    .HasName("PK_Estatus");
-
-                entity.ToTable("talumnoestatus");
-
-                entity.Property(e => e.Alueid)
-                    .ValueGeneratedNever()
-                    .HasColumnName("alueid");
-
-                entity.Property(e => e.Aluestanio).HasColumnName("aluestanio");
-
-                entity.Property(e => e.Aluestcomentario)
-                    .HasMaxLength(300)
-                    .HasColumnName("aluestcomentario")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Aluestfecha)
-                    .HasColumnName("aluestfecha")
-                    .HasComment("\n");
-
-                entity.Property(e => e.Aluesthora)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("aluesthora");
-
-                entity.Property(e => e.Aluestid).HasColumnName("aluestid");
-
-                entity.Property(e => e.Aluestperiodo).HasColumnName("aluestperiodo");
-
-                entity.Property(e => e.Aluid).HasColumnName("aluid");
-
-                entity.Property(e => e.Usuid).HasColumnName("usuid");
-
-                entity.HasOne(d => d.Alu)
-                    .WithMany(p => p.Talumnoestatus)
-                    .HasForeignKey(d => d.Aluid)
-                    .HasConstraintName("FK_estatus");
-            });
-
-            modelBuilder.Entity<Tcarrera>(entity =>
-            {
-                entity.HasKey(e => e.Carid)
-                    .HasName("tcarrera_pkey");
-
-                entity.ToTable("tcarrera");
-
-                entity.HasIndex(e => e.Areid, "tcarrera_areid_idx");
-
-                entity.Property(e => e.Carid).HasColumnName("carid");
-
-                entity.Property(e => e.Areid).HasColumnName("areid");
-
-                entity.Property(e => e.Carclave)
-                    .IsRequired()
-                    .HasMaxLength(150)
-                    .HasColumnName("carclave")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Carnombre)
-                    .IsRequired()
-                    .HasMaxLength(800)
-                    .HasColumnName("carnombre")
-                    .IsFixedLength();
-            });
-
-            modelBuilder.Entity<Tcodigo>(entity =>
-            {
-                entity.HasKey(e => e.Codid)
-                    .HasName("tcodigo_pkey");
-
-                entity.ToTable("tcodigo");
-
-                entity.Property(e => e.Codid).HasColumnName("codid");
-
-                entity.Property(e => e.Codactivo).HasColumnName("codactivo");
-
-                entity.Property(e => e.Coddep)
-                    .HasMaxLength(5)
-                    .HasColumnName("coddep")
-                    .IsFixedLength();
+                entity.Property(e => e.Cicloatual).HasColumnName("cicloatual");
 
                 entity.Property(e => e.Coddescripcion)
-                    .IsRequired()
                     .HasMaxLength(250)
                     .HasColumnName("coddescripcion")
                     .IsFixedLength();
 
-                entity.Property(e => e.Codespecifico)
-                    .IsRequired()
-                    .HasMaxLength(8)
-                    .HasColumnName("codespecifico")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Codgeneral)
-                    .IsRequired()
-                    .HasMaxLength(3)
-                    .HasColumnName("codgeneral")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Codmodulo)
-                    .IsRequired()
-                    .HasMaxLength(3)
-                    .HasColumnName("codmodulo")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Codnivel).HasColumnName("codnivel");
-
-                entity.Property(e => e.Codreferencia).HasColumnName("codreferencia");
-            });
-
-            modelBuilder.Entity<Tcrm>(entity =>
-            {
-                entity.HasKey(e => e.Crmid)
-                    .HasName("tcrm_pkey");
-
-                entity.ToTable("tcrm");
-
-                entity.HasIndex(e => e.Crmclave, "tcrm_crmclave_key")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.Crmpaisid, "tcrm_crmpaisid_idx");
-
-                entity.Property(e => e.Crmid)
-                    .ValueGeneratedNever()
-                    .HasColumnName("crmid");
-
-                entity.Property(e => e.Crmactivo).HasColumnName("crmactivo");
-
                 entity.Property(e => e.Crmamaterno)
                     .HasMaxLength(50)
                     .HasColumnName("crmamaterno")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Crmapaterno)
                     .HasMaxLength(50)
                     .HasColumnName("crmapaterno")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat01)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat01")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat02)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat02")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat03)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat03")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat04)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat04")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat05)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat05")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat06)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat06")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat07)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat07")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat08)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat08")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat09)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat09")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmcat10)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmcat10")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
 
                 entity.Property(e => e.Crmclave)
                     .HasMaxLength(20)
                     .HasColumnName("crmclave")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
-
-                entity.Property(e => e.Crmcomentarios).HasColumnName("crmcomentarios");
-
-                entity.Property(e => e.Crmcompany).HasColumnName("crmcompany");
-
-                entity.Property(e => e.Crmcp)
-                    .HasMaxLength(5)
-                    .HasColumnName("crmcp")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmdireccion)
-                    .HasMaxLength(1024)
-                    .HasColumnName("crmdireccion")
-                    .HasDefaultValueSql("NULL::character varying");
-
-                entity.Property(e => e.Crmedad).HasColumnName("crmedad");
-
-                entity.Property(e => e.Crmedo).HasColumnName("crmedo");
-
-                entity.Property(e => e.Crmedocivil)
-                    .HasMaxLength(1)
-                    .HasColumnName("crmedocivil")
-                    .HasDefaultValueSql("NULL::bpchar");
 
                 entity.Property(e => e.Crmfenac)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("crmfenac");
 
-                entity.Property(e => e.Crmimagen).HasColumnName("crmimagen");
-
-                entity.Property(e => e.CrmimagenGxi)
-                    .HasMaxLength(2048)
-                    .HasColumnName("crmimagen_gxi")
-                    .HasDefaultValueSql("NULL::character varying");
-
-                entity.Property(e => e.Crmmanagercrb).HasColumnName("crmmanagercrb");
-
-                entity.Property(e => e.Crmmanagercrd).HasColumnName("crmmanagercrd");
+                entity.Property(e => e.Crmid).HasColumnName("crmid");
 
                 entity.Property(e => e.Crmmodfecha)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("crmmodfecha");
 
-                entity.Property(e => e.Crmmodhora)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmmodhora")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmmodprog)
-                    .HasMaxLength(128)
-                    .HasColumnName("crmmodprog")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmmodusuario).HasColumnName("crmmodusuario");
-
-                entity.Property(e => e.Crmmoneda)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmmoneda")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmmotivo).HasColumnName("crmmotivo");
-
                 entity.Property(e => e.Crmmunicipio).HasColumnName("crmmunicipio");
-
-                entity.Property(e => e.Crmnacionalidad)
-                    .HasMaxLength(50)
-                    .HasColumnName("crmnacionalidad")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
 
                 entity.Property(e => e.Crmnombre)
                     .HasMaxLength(50)
                     .HasColumnName("crmnombre")
-                    .HasDefaultValueSql("NULL::bpchar")
                     .IsFixedLength();
-
-                entity.Property(e => e.Crmpaisid).HasColumnName("crmpaisid");
 
                 entity.Property(e => e.Crmregfecha)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("crmregfecha");
 
-                entity.Property(e => e.Crmreghora)
-                    .HasMaxLength(8)
-                    .HasColumnName("crmreghora")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmregprog)
-                    .HasMaxLength(128)
-                    .HasColumnName("crmregprog")
-                    .HasDefaultValueSql("NULL::bpchar")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Crmregusuario).HasColumnName("crmregusuario");
-
                 entity.Property(e => e.Crmsexo)
                     .HasMaxLength(1)
-                    .HasColumnName("crmsexo")
-                    .HasDefaultValueSql("NULL::bpchar");
+                    .HasColumnName("crmsexo");
+            });
+
+            modelBuilder.Entity<Etlcatalogoconcepto>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("etlcatalogoconcepto");
+
+                entity.Property(e => e.Cpconcepto)
+                    .HasMaxLength(100)
+                    .HasColumnName("cpconcepto")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Cptipodoc)
+                    .HasMaxLength(20)
+                    .HasColumnName("cptipodoc")
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<Etlcuentasdetalle>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("etlcuentasdetalle");
+
+                entity.Property(e => e.Aluid).HasColumnName("aluid");
+
+                entity.Property(e => e.Cpconcepto)
+                    .HasMaxLength(100)
+                    .HasColumnName("cpconcepto")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Cpdoclinea)
+                    .HasMaxLength(3)
+                    .HasColumnName("cpdoclinea")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Cpestatus).HasColumnName("cpestatus");
+
+                entity.Property(e => e.Cpfechaven).HasColumnName("cpfechaven");
+
+                entity.Property(e => e.Cpfecreg).HasColumnName("cpfecreg");
+
+                entity.Property(e => e.Cpid).HasColumnName("cpid");
+
+                entity.Property(e => e.Cpidref).HasColumnName("cpidref");
+
+                entity.Property(e => e.Cpimportepend)
+                    .HasPrecision(9, 2)
+                    .HasColumnName("cpimportepend");
+
+                entity.Property(e => e.Cpimportetotal)
+                    .HasPrecision(9, 2)
+                    .HasColumnName("cpimportetotal");
+
+                entity.Property(e => e.Cpnodoc).HasColumnName("cpnodoc");
             });
 
             modelBuilder.HasSequence("apuestos_apid_seq").StartsAt(18);
@@ -1034,6 +300,8 @@ namespace ETL.Data.NpgSql
             modelBuilder.HasSequence("otid").StartsAt(2);
 
             modelBuilder.HasSequence("prsid").StartsAt(12);
+
+            modelBuilder.HasSequence("rPayuRegistro_rPayuRegistroid_seq").StartsAt(21);
 
             modelBuilder.HasSequence("taaplicaciones_apliid_seq").StartsAt(2);
 
