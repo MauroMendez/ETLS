@@ -13,12 +13,10 @@ namespace ETL.Data.NpgSql
         {
         }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(@"Server = interpue.com.mx; Port = 5435; Database = InterERP; User Id = pruebas; Password = Root.inter19!; Trust Server Certificate=true; Include Error Detail = true;");
         }
-
 
         public NpgSql_Context(DbContextOptions<NpgSql_Context> options)
             : base(options)
@@ -29,6 +27,8 @@ namespace ETL.Data.NpgSql
         public virtual DbSet<Etlalumno> Etlalumno { get; set; }
         public virtual DbSet<Etlcatalogoconcepto> Etlcatalogoconcepto { get; set; }
         public virtual DbSet<Etlcuentasdetalle> Etlcuentasdetalle { get; set; }
+        public virtual DbSet<Etlreferencia> Etlreferencia { get; set; }
+        public virtual DbSet<Etlreferenciasconceptos> Etlreferenciasconceptos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -277,6 +277,57 @@ namespace ETL.Data.NpgSql
                     .HasColumnName("cpimportetotal");
 
                 entity.Property(e => e.Cpnodoc).HasColumnName("cpnodoc");
+            });
+
+            modelBuilder.Entity<Etlreferencia>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("etlreferencia");
+
+                entity.Property(e => e.Aluid)
+                    .HasPrecision(18)
+                    .HasColumnName("aluid");
+
+                entity.Property(e => e.Referenciaestatus)
+                    .HasMaxLength(60)
+                    .HasColumnName("referenciaestatus")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Referenciafechaini).HasColumnName("referenciafechaini");
+
+                entity.Property(e => e.Referenciafechavig).HasColumnName("referenciafechavig");
+
+                entity.Property(e => e.Referenciaid)
+                    .HasMaxLength(20)
+                    .HasColumnName("referenciaid")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Referenciatotal)
+                    .HasPrecision(9, 2)
+                    .HasColumnName("referenciatotal");
+
+                entity.Property(e => e.Reffecreg)
+                    .HasColumnType("timestamp without time zone")
+                    .HasColumnName("reffecreg");
+            });
+
+            modelBuilder.Entity<Etlreferenciasconceptos>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("etlreferenciasconceptos");
+
+                entity.Property(e => e.Cpid).HasColumnName("cpid");
+
+                entity.Property(e => e.Referenciaid)
+                    .HasMaxLength(20)
+                    .HasColumnName("referenciaid")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Refmonto)
+                    .HasPrecision(15, 2)
+                    .HasColumnName("refmonto");
             });
 
             modelBuilder.HasSequence("apuestos_apid_seq").StartsAt(18);

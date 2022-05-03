@@ -28,10 +28,16 @@ namespace ETL
 
 
                     // Cargamos listas de precios
-                    //string cargaListaPrecios = CargaListaPrecios();
+                    // string cargaListaPrecios = CargaListaPrecios();
 
-                    //Carga detalle de cuentas
-                    string cargaDetCuentas = CargaDetalleCuentas();
+                    // Carga detalle de cuentas
+                    // string cargaDetCuentas = CargaDetalleCuentas();
+
+                    // Carga referencias
+                    //string cargaRefe = CargaReferencias();
+
+                    // Carga detalle de referencia
+                    string cargaDetRef = CargaDetalleReferencias();
 
 
 
@@ -581,7 +587,6 @@ namespace ETL
                         return "Conceptos cargados";
                     }
 
-
                     bool buscaConepto(string clave)
                     {
                         return sql_context.CatalogoConceptos.Any(a => a.ConClave == clave.Trim());
@@ -690,20 +695,16 @@ namespace ETL
 
                     string CargaDetalleCuentas()
                     {
-
-                        List<Etlcuentasdetalle> detallesv2 = (from ccdv2 in npgsql_context.Etlcuentasdetalle where ccdv2.Cpid > 2928 orderby ccdv2.Cpid ascending select ccdv2).Take(2500).ToList();
+                        int cont = 0;
+                        List<Etlcuentasdetalle> detallesv2 = (from ccdv2 in npgsql_context.Etlcuentasdetalle where ccdv2.Cpid > 132835 orderby ccdv2.Cpid ascending select ccdv2).ToList();
 
                         foreach (Etlcuentasdetalle detallev2 in detallesv2)
                         {
                             DetalleCuentaPorCobrar detalleCuentav3 = new DetalleCuentaPorCobrar();
-
-
+                            cont++;
                             //int idDTCuenta = (from dcpc in sql_context.DetalleCuentaPorCobrar where dcpc.DcpcId == detallev2.Cpid select dcpc.DcpcId).Any();
 
-
                             bool existe = sql_context.DetalleCuentaPorCobrar.Any(a => a.DcpcId == detallev2.Cpid);
-
-
 
                             if (detallev2.Cpid != 0 || existe)
                             {
@@ -720,23 +721,21 @@ namespace ETL
 
                                 if (detallev2.Aluid == 0 || DBNull.Value.Equals(detallev2.Aluid) || detallev2.Aluid == null)
                                 {
-
                                     detalleCuentav3.DcpcUsuid = 0;
                                 }
                                 else
                                 {
-
                                     detalleCuentav3.DcpcUsuid = (long)detallev2.Aluid;
                                 }
 
                                 detalleCuentav3.DcpcFechaRegistro = (DateTime)detallev2.Cpfecreg;
-
 
                                 try
                                 {
                                     sql_context.DetalleCuentaPorCobrar.Add(detalleCuentav3);
                                     sql_context.SaveChanges();
                                     Console.WriteLine("Detalle cuenta por cobrar registrado");
+                                    Console.WriteLine($"{cont}");
                                     Console.WriteLine("<---------------------------------->");
                                 }
                                 catch (Exception e)
@@ -751,15 +750,166 @@ namespace ETL
                                 Console.WriteLine("Cuenta por cobrar existente");
                                 Console.WriteLine("<---------------------------------->");
                             }
+                        }
+                        return "Cuentas cargadas";
+                    }
+
+                    string CargaReferencias()
+                    {
+                        // consulta de referencias && REF2.Referenciaid == "0000786 101"
+                        List<Etlreferencia> referenciasv2 = (from REF2 in npgsql_context.Etlreferencia where REF2.Referenciaid != ""  orderby REF2.Referenciaid select REF2).ToList();
+                        int cont = 0;
+                        // foreach de la vista
+                        foreach (Etlreferencia refv2 in referenciasv2)
+                        {
+                            Referencias refv3 = new Referencias();
+
+                            bool existe = sql_context.Referencias.Any(a => a.RReferencia == refv2.Referenciaid.Trim());
+                            if (existe)
+                            {
+                                Console.WriteLine("Esta rereferencia ya existe.");
+                                Console.WriteLine("<-------------------------->");
+                            }
+                            else
+                            {
+                                cont++;
+                                refv3.RAlumnoId = (long)(refv2.Aluid == null || DBNull.Value.Equals(refv2.Aluid) ? 0 : refv2.Aluid);
+                                string matricula = (from ALU in sql_context.Alumno where ALU.AlId == refv2.Aluid select ALU.AlMatricula).FirstOrDefault();
+                                refv3.RAlumnoClave = (matricula == null || matricula.Trim() == "" || DBNull.Value.Equals(matricula) ? "" : matricula.Trim());
+                                refv3.RReferencia = (refv2.Referenciaid == null || refv2.Referenciaid.Trim() == "" || DBNull.Value.Equals(refv2.Referenciaid) ? "" : refv2.Referenciaid.Trim());
+                                refv3.RFechaCreacion = (DateTime)(refv2.Reffecreg == null || DBNull.Value.Equals(refv2.Reffecreg) ? DateTime.Now : refv2.Reffecreg);
+                                refv3.RFechaInicio = (DateTime)(refv2.Referenciafechaini == null || DBNull.Value.Equals(refv2.Referenciafechaini) ? DateTime.Now : refv2.Referenciafechaini);
+                                refv3.RFechaVigencia = (DateTime)(refv2.Referenciafechavig == null || DBNull.Value.Equals(refv2.Referenciafechavig) ? DateTime.Now : refv2.Referenciafechavig);
+                                refv3.RTotalReferencia = (decimal)(refv2.Referenciatotal == null || DBNull.Value.Equals(refv2.Referenciatotal) ? 0 : refv2.Referenciatotal);
+
+
+                                if (refv2.Referenciaestatus == null || refv2.Referenciaestatus.Trim() == "" || DBNull.Value.Equals(refv2.Referenciaestatus))
+                                {
+                                    refv2.Referenciaestatus = "";
+                                    refv3.RReferenciaStatus = 27;
+                                }
+                                else if (refv2.Referenciaestatus.Trim() == "Vigente")
+                                {
+                                    refv3.RReferenciaStatus = 27;
+                                }
+                                else if (refv2.Referenciaestatus.Trim() == "APLICADA")
+                                {
+                                    refv3.RReferenciaStatus = 28;
+                                }
+                                else if (refv2.Referenciaestatus.Trim() == "CANCELADA" || refv2.Referenciaestatus.Trim() == "CANCELADO")
+                                {
+                                    refv3.RReferenciaStatus = 26;
+                                }
+                                else
+                                {
+                                    refv3.RReferenciaStatus = 26;
+                                }
+                                refv3.RUsuid = 9;
+                                refv3.RFechaRegistro = (DateTime)(refv2.Reffecreg == null || DBNull.Value.Equals(refv2.Reffecreg) ? DateTime.Now : refv2.Reffecreg);
+
+
+                                try
+                                {
+                                    sql_context.Referencias.Add(refv3);
+                                    sql_context.SaveChanges();
+                                    Console.WriteLine($"Referencia registrada {cont}");
+                                    Console.WriteLine("<--------------------------->");
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine($"error: {e.Message}");
+                                    Console.WriteLine("<--------------------------->");
+                                }
+
+
+                                
+                            }
+
+
+
+                            
+
 
                         }
 
 
 
-                        return "Cuentas cargadas";
+
+
+                        
+
+
+
+                        return "Referencias cargadas";
                     }
 
+                    string CargaDetalleReferencias()
+                    {
+                        List<Etlreferenciasconceptos> detalleRefsv2 = (from DR in npgsql_context.Etlreferenciasconceptos orderby DR.Referenciaid ascending select DR).Take(12).ToList();
+                        int cont = 0;
+                        foreach (Etlreferenciasconceptos detRefv2 in detalleRefsv2)
+                        {
+                            cont++;
+                            DetalleReferencia detalleReferencia = new DetalleReferencia();
 
+                            if (detRefv2.Referenciaid == null || detRefv2.Referenciaid.Trim() == "" || DBNull.Value.Equals(detRefv2.Referenciaid))
+                            {
+                                detalleReferencia.DrReferencia = 0;
+                            }
+                            else
+                            {
+                                long idRef = (from RF in sql_context.Referencias where RF.RReferencia == detRefv2.Referenciaid.Trim() select RF.RReferenciaId).FirstOrDefault();
+                                detalleReferencia.DrReferencia = idRef;
+                            }
+
+                            if (detRefv2.Cpid == 0 || detRefv2.Cpid == null || DBNull.Value.Equals(detRefv2.Cpid))
+                            {
+                                detalleReferencia.DrCuentaDetalle = 0;
+                            }
+                            else
+                            {
+                                detalleReferencia.DrCuentaDetalle = (int)detRefv2.Cpid;
+                            }
+                            
+                            if (detRefv2.Refmonto == 0 || detRefv2.Refmonto == null || DBNull.Value.Equals(detRefv2.Refmonto))
+                            {
+                                detalleReferencia.DrMontoAplicado = 0;
+                            }
+                            else
+                            {
+                                detalleReferencia.DrMontoAplicado = (int)detRefv2.Refmonto;
+                            }
+
+
+
+                            try
+                            {
+                                detalleReferencia.DrUsuid = 9;
+                                detalleReferencia.DrFechaRegistro = DateTime.Now;
+                                sql_context.DetalleReferencia.Add(detalleReferencia);
+                                sql_context.SaveChanges();
+
+                                Console.WriteLine("Detalle referencia registrada " + cont);
+                                Console.WriteLine("<------------------------->");
+
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("ERROR: " + e.Message);
+                                Console.WriteLine("<------------------------->");
+                            }
+
+
+                            
+
+
+                        }
+
+
+
+
+                        return "Detalles de referencias cargados";
+                    }
 
                 }
 

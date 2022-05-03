@@ -26,6 +26,14 @@
          "ObjectType": 3
       },
       {
+         "Name": "public.etlreferencia",
+         "ObjectType": 3
+      },
+      {
+         "Name": "public.etlreferenciasconceptos",
+         "ObjectType": 3
+      },
+      {
          "Name": "public.etlcuentasdetalle",
          "ObjectType": 3
       }
