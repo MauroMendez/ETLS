@@ -25,6 +25,7 @@ namespace ETL.Data.Sql
         public string DfUso { get; set; }
         public string DfEmail { get; set; }
 
+        public virtual Estados DfEstadoNavigation { get; set; }
         public virtual Municipios DfMunicipioNavigation { get; set; }
         public virtual UsosFacturacion DfUsoNavigation { get; set; }
         public virtual ICollection<Facturas> Facturas { get; set; }

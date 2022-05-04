@@ -26,6 +26,7 @@ namespace ETL.Data.Sql
         public DateTime? FechaActivacionCv { get; set; }
         public bool ActivoCv { get; set; }
 
+        public virtual ProgramasCv IdProgramaNavigation { get; set; }
         public virtual ICollection<FirmaReglamentosCv> FirmaReglamentosCv { get; set; }
     }
 }

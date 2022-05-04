@@ -7,8 +7,15 @@ namespace ETL.Data.Sql
 {
     public partial class MetodoPago
     {
+        public MetodoPago()
+        {
+            AlumnoPagos = new HashSet<AlumnoPagos>();
+        }
+
         public int MpMetodoId { get; set; }
         public string MpClave { get; set; }
         public string MpDescripcion { get; set; }
+
+        public virtual ICollection<AlumnoPagos> AlumnoPagos { get; set; }
     }
 }

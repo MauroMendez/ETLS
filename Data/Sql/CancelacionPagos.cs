@@ -21,6 +21,7 @@ namespace ETL.Data.Sql
         public long CpUsuid { get; set; }
         public DateTime CpFechaRegistro { get; set; }
 
+        public virtual AlumnoPagos CpPago { get; set; }
         public virtual CatalogoCancelacion CpTipoCancelacionNavigation { get; set; }
         public virtual ICollection<DetalleCancelacionPago> DetalleCancelacionPago { get; set; }
     }

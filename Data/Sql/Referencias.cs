@@ -9,6 +9,7 @@ namespace ETL.Data.Sql
     {
         public Referencias()
         {
+            AlumnoPagos = new HashSet<AlumnoPagos>();
             AlumnoPo = new HashSet<AlumnoPo>();
             DetalleReferencia = new HashSet<DetalleReferencia>();
         }
@@ -27,6 +28,7 @@ namespace ETL.Data.Sql
 
         public virtual Alumno RAlumno { get; set; }
         public virtual EstatusList RReferenciaStatusNavigation { get; set; }
+        public virtual ICollection<AlumnoPagos> AlumnoPagos { get; set; }
         public virtual ICollection<AlumnoPo> AlumnoPo { get; set; }
         public virtual ICollection<DetalleReferencia> DetalleReferencia { get; set; }
     }

@@ -9,6 +9,7 @@ namespace ETL.Data.Sql
     {
         public FormaPago()
         {
+            AlumnoPagos = new HashSet<AlumnoPagos>();
             FormaPagoTxt = new HashSet<FormaPagoTxt>();
         }
 
@@ -19,6 +20,7 @@ namespace ETL.Data.Sql
         public long FpUsuid { get; set; }
         public DateTime FpFechaRegistro { get; set; }
 
+        public virtual ICollection<AlumnoPagos> AlumnoPagos { get; set; }
         public virtual ICollection<FormaPagoTxt> FormaPagoTxt { get; set; }
     }
 }

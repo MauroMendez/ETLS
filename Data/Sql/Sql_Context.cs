@@ -27,6 +27,7 @@ namespace ETL.Data.Sql
         public virtual DbSet<Administrativos> Administrativos { get; set; }
         public virtual DbSet<Alergias> Alergias { get; set; }
         public virtual DbSet<Alumno> Alumno { get; set; }
+        public virtual DbSet<AlumnoPagos> AlumnoPagos { get; set; }
         public virtual DbSet<AlumnoPo> AlumnoPo { get; set; }
         public virtual DbSet<Areas> Areas { get; set; }
         public virtual DbSet<Bancos> Bancos { get; set; }
@@ -70,7 +71,10 @@ namespace ETL.Data.Sql
         public virtual DbSet<Edificios> Edificios { get; set; }
         public virtual DbSet<Empresas> Empresas { get; set; }
         public virtual DbSet<Escuelas> Escuelas { get; set; }
+        public virtual DbSet<Escuelasf> Escuelasf { get; set; }
         public virtual DbSet<EsquemaPago> EsquemaPago { get; set; }
+        public virtual DbSet<EsquemaPagoHistorial> EsquemaPagoHistorial { get; set; }
+        public virtual DbSet<Estados> Estados { get; set; }
         public virtual DbSet<EstatusList> EstatusList { get; set; }
         public virtual DbSet<Facturas> Facturas { get; set; }
         public virtual DbSet<Facultades> Facultades { get; set; }
@@ -84,9 +88,12 @@ namespace ETL.Data.Sql
         public virtual DbSet<GeneralesAlumno> GeneralesAlumno { get; set; }
         public virtual DbSet<GeneralesProspecto> GeneralesProspecto { get; set; }
         public virtual DbSet<Grupos> Grupos { get; set; }
+        public virtual DbSet<Horarios> Horarios { get; set; }
         public virtual DbSet<Justificantes> Justificantes { get; set; }
         public virtual DbSet<ListaPrecios> ListaPrecios { get; set; }
         public virtual DbSet<Materias> Materias { get; set; }
+        public virtual DbSet<MateriasImparteDocente> MateriasImparteDocente { get; set; }
+        public virtual DbSet<MediosContacto> MediosContacto { get; set; }
         public virtual DbSet<MediosDifusion> MediosDifusion { get; set; }
         public virtual DbSet<MetodoPago> MetodoPago { get; set; }
         public virtual DbSet<Modalidades> Modalidades { get; set; }
@@ -103,6 +110,7 @@ namespace ETL.Data.Sql
         public virtual DbSet<Permisos> Permisos { get; set; }
         public virtual DbSet<PermisosAlumnos> PermisosAlumnos { get; set; }
         public virtual DbSet<PlanesEstudio> PlanesEstudio { get; set; }
+        public virtual DbSet<ProgramasCv> ProgramasCv { get; set; }
         public virtual DbSet<Puestos> Puestos { get; set; }
         public virtual DbSet<Referencias> Referencias { get; set; }
         public virtual DbSet<RegistroChecador> RegistroChecador { get; set; }
@@ -368,6 +376,113 @@ namespace ETL.Data.Sql
                     .HasForeignKey(d => d.AlStatusActual)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Alumno_Estatus");
+            });
+
+            modelBuilder.Entity<AlumnoPagos>(entity =>
+            {
+                entity.HasKey(e => e.ApPagoId)
+                    .HasName("PK__AlumnoPa__643B99A242ABABF3");
+
+                entity.Property(e => e.ApPagoId).HasColumnName("AP_PagoID");
+
+                entity.Property(e => e.ApAlumnoClave)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("AP_AlumnoClave");
+
+                entity.Property(e => e.ApAlumnoId).HasColumnName("AP_AlumnoID");
+
+                entity.Property(e => e.ApCuentaBancaria).HasColumnName("Ap_CuentaBancaria");
+
+                entity.Property(e => e.ApEstatus).HasColumnName("AP_Estatus");
+
+                entity.Property(e => e.ApFechaBancaria)
+                    .HasColumnType("date")
+                    .HasColumnName("AP_FechaBancaria");
+
+                entity.Property(e => e.ApFechaContable)
+                    .HasColumnType("date")
+                    .HasColumnName("AP_FechaContable");
+
+                entity.Property(e => e.ApFechaCreacion)
+                    .HasColumnType("date")
+                    .HasColumnName("AP_FechaCreacion");
+
+                entity.Property(e => e.ApFechaRegistro)
+                    .HasColumnType("datetime")
+                    .HasColumnName("AP_FechaRegistro");
+
+                entity.Property(e => e.ApFormaPagoId).HasColumnName("AP_FormaPagoID");
+
+                entity.Property(e => e.ApImportePendiente)
+                    .HasColumnType("numeric(10, 2)")
+                    .HasColumnName("AP_ImportePendiente");
+
+                entity.Property(e => e.ApImporteTotal)
+                    .HasColumnType("numeric(10, 2)")
+                    .HasColumnName("AP_ImporteTotal");
+
+                entity.Property(e => e.ApMetodoPago).HasColumnName("AP_MetodoPago");
+
+                entity.Property(e => e.ApMoneda).HasColumnName("AP_Moneda");
+
+                entity.Property(e => e.ApNoAprobacion)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("AP_NoAprobacion");
+
+                entity.Property(e => e.ApObservaciones)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("AP_Observaciones");
+
+                entity.Property(e => e.ApReferencia)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("AP_Referencia");
+
+                entity.Property(e => e.ApReferenciaBancaria)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .HasColumnName("AP_ReferenciaBancaria");
+
+                entity.Property(e => e.ApReferenciaId).HasColumnName("AP_ReferenciaID");
+
+                entity.Property(e => e.ApUsuid).HasColumnName("AP_Usuid");
+
+                entity.HasOne(d => d.ApAlumno)
+                    .WithMany(p => p.AlumnoPagos)
+                    .HasForeignKey(d => d.ApAlumnoId)
+                    .HasConstraintName("FK__AlumnoPag__AP_Al__01D345B0");
+
+                entity.HasOne(d => d.ApCuentaBancariaNavigation)
+                    .WithMany(p => p.AlumnoPagos)
+                    .HasForeignKey(d => d.ApCuentaBancaria)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AlumnoPagos_CuentaBancaria");
+
+                entity.HasOne(d => d.ApEstatusNavigation)
+                    .WithMany(p => p.AlumnoPagos)
+                    .HasForeignKey(d => d.ApEstatus)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AlumnoPagos_EstatusList");
+
+                entity.HasOne(d => d.ApFormaPago)
+                    .WithMany(p => p.AlumnoPagos)
+                    .HasForeignKey(d => d.ApFormaPagoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AlumnoPagos_FormaPago");
+
+                entity.HasOne(d => d.ApMetodoPagoNavigation)
+                    .WithMany(p => p.AlumnoPagos)
+                    .HasForeignKey(d => d.ApMetodoPago)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AlumnoPagos_MetodoPago");
+
+                entity.HasOne(d => d.ApReferenciaNavigation)
+                    .WithMany(p => p.AlumnoPagos)
+                    .HasForeignKey(d => d.ApReferenciaId)
+                    .HasConstraintName("FK_AlumnoPagos_Referencias");
             });
 
             modelBuilder.Entity<AlumnoPo>(entity =>
@@ -923,6 +1038,12 @@ namespace ETL.Data.Sql
 
                 entity.Property(e => e.CpUsuid).HasColumnName("CP_Usuid");
 
+                entity.HasOne(d => d.CpPago)
+                    .WithMany(p => p.CancelacionPagos)
+                    .HasForeignKey(d => d.CpPagoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Cancelaci__CP_Pa__18B6AB08");
+
                 entity.HasOne(d => d.CpTipoCancelacionNavigation)
                     .WithMany(p => p.CancelacionPagos)
                     .HasForeignKey(d => d.CpTipoCancelacion)
@@ -1462,6 +1583,11 @@ namespace ETL.Data.Sql
                     .HasForeignKey(d => d.ConTipoConvenio)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Convenios_TipoConvenios");
+
+                entity.HasOne(d => d.Estados)
+                    .WithMany(p => p.Convenios)
+                    .HasForeignKey(d => d.EstadosId)
+                    .HasConstraintName("FK__Convenios__Estad__34C9A528");
             });
 
             modelBuilder.Entity<CuentaBancaria>(entity =>
@@ -1534,7 +1660,9 @@ namespace ETL.Data.Sql
             {
                 entity.HasKey(e => e.CpcId);
 
-                entity.Property(e => e.CpcId).HasColumnName("CPC_ID");
+                entity.Property(e => e.CpcId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("CPC_ID");
 
                 entity.Property(e => e.CpcAlumnoClave)
                     .HasMaxLength(10)
@@ -1678,6 +1806,12 @@ namespace ETL.Data.Sql
                     .HasColumnName("DF_Uso")
                     .IsFixedLength();
 
+                entity.HasOne(d => d.DfEstadoNavigation)
+                    .WithMany(p => p.DatosFacturacion)
+                    .HasForeignKey(d => d.DfEstado)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DatosFact__DF_Es__29AC2CE0");
+
                 entity.HasOne(d => d.DfMunicipioNavigation)
                     .WithMany(p => p.DatosFacturacion)
                     .HasForeignKey(d => d.DfMunicipio)
@@ -1791,6 +1925,12 @@ namespace ETL.Data.Sql
                     .HasForeignKey(d => d.DcCuentaDetalle)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DetalleCancelacionPago_DetalleCuentaCobrar");
+
+                entity.HasOne(d => d.DcPago)
+                    .WithMany(p => p.DetalleCancelacionPago)
+                    .HasForeignKey(d => d.DcPagoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DetalleCancelacionPago_Pago");
             });
 
             modelBuilder.Entity<DetalleConvenio>(entity =>
@@ -1827,7 +1967,9 @@ namespace ETL.Data.Sql
             {
                 entity.HasKey(e => e.DcpcId);
 
-                entity.Property(e => e.DcpcId).HasColumnName("DCPC_ID");
+                entity.Property(e => e.DcpcId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("DCPC_ID");
 
                 entity.Property(e => e.DcpcCuentaId).HasColumnName("DCPC_CuentaId");
 
@@ -1868,12 +2010,6 @@ namespace ETL.Data.Sql
                 entity.Property(e => e.DcpcReferenciaCuentaDetalle).HasColumnName("DCPC_ReferenciaCuentaDetalle");
 
                 entity.Property(e => e.DcpcUsuid).HasColumnName("DCPC_Usuid");
-
-                entity.HasOne(d => d.DcpcCuenta)
-                    .WithMany(p => p.DetalleCuentaPorCobrar)
-                    .HasForeignKey(d => d.DcpcCuentaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_DetalleCuentaPorCobrar_CuentaPorCobrar");
 
                 entity.HasOne(d => d.DcpcEstatusNavigation)
                     .WithMany(p => p.DetalleCuentaPorCobrar)
@@ -1940,6 +2076,12 @@ namespace ETL.Data.Sql
                     .HasForeignKey(d => d.DpCuentaDetalle)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DetallePago_CuentaDetalle");
+
+                entity.HasOne(d => d.DpPago)
+                    .WithMany(p => p.DetallePago)
+                    .HasForeignKey(d => d.DpPagoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DetallePa__DP_Pa__00DF2177");
             });
 
             modelBuilder.Entity<DetalleReferencia>(entity =>
@@ -2198,6 +2340,19 @@ namespace ETL.Data.Sql
                     .HasColumnName("Escuelas_Nombre");
             });
 
+            modelBuilder.Entity<Escuelasf>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.EscuelasEstado).HasColumnName("Escuelas_Estado");
+
+                entity.Property(e => e.EscuelasId).HasColumnName("Escuelas_ID");
+
+                entity.Property(e => e.EscuelasNombre)
+                    .IsUnicode(false)
+                    .HasColumnName("Escuelas_Nombre");
+            });
+
             modelBuilder.Entity<EsquemaPago>(entity =>
             {
                 entity.HasKey(e => e.EpId)
@@ -2247,6 +2402,57 @@ namespace ETL.Data.Sql
                     .HasForeignKey(d => d.EpListaPrecio)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EsquemaPago_ListaPrecios");
+            });
+
+            modelBuilder.Entity<EsquemaPagoHistorial>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.EphAlumnoId).HasColumnName("EPH_AlumnoID");
+
+                entity.Property(e => e.EphAutorizadoPor)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("EPH_AutorizadoPor");
+
+                entity.Property(e => e.EphFechaFin)
+                    .HasColumnType("date")
+                    .HasColumnName("EPH_FechaFin");
+
+                entity.Property(e => e.EphFechaInicio)
+                    .HasColumnType("date")
+                    .HasColumnName("EPH_FechaInicio");
+
+                entity.Property(e => e.EphFormasPagoId).HasColumnName("EPH_FormasPagoID");
+
+                entity.Property(e => e.FphMensualidadAnterior).HasColumnName("FPH MensualidadAnterior");
+
+                entity.HasOne(d => d.EphAlumno)
+                    .WithMany()
+                    .HasForeignKey(d => d.EphAlumnoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__EsquemaPa__EPH_A__0B5CAFEA");
+
+                entity.HasOne(d => d.EphAutorizadoPorNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.EphAutorizadoPor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__EsquemaPa__EPH_A__43A1090D");
+            });
+
+            modelBuilder.Entity<Estados>(entity =>
+            {
+                entity.Property(e => e.EstadosId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("Estados_ID");
+
+                entity.Property(e => e.EstadosNombre)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Estados_Nombre")
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<EstatusList>(entity =>
@@ -2317,6 +2523,12 @@ namespace ETL.Data.Sql
                     .IsUnicode(false)
                     .HasColumnName("F_Uso")
                     .IsFixedLength();
+
+                entity.HasOne(d => d.FPago)
+                    .WithOne(p => p.Facturas)
+                    .HasForeignKey<Facturas>(d => d.FPagoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Facturas__F_Pago__03BB8E22");
 
                 entity.HasOne(d => d.FRfcNavigation)
                     .WithMany(p => p.Facturas)
@@ -2640,7 +2852,7 @@ namespace ETL.Data.Sql
 
                 entity.Property(e => e.GaNombreTutor)
                     .IsRequired()
-                    .HasMaxLength(30)
+                    .HasMaxLength(60)
                     .IsUnicode(false)
                     .HasColumnName("GA_NombreTutor")
                     .IsFixedLength();
@@ -2660,7 +2872,7 @@ namespace ETL.Data.Sql
                     .IsFixedLength();
 
                 entity.Property(e => e.GaTelefonoAlumno)
-                    .HasMaxLength(15)
+                    .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("GA_TelefonoAlumno")
                     .IsFixedLength();
@@ -2673,7 +2885,7 @@ namespace ETL.Data.Sql
 
                 entity.Property(e => e.GaTelefonoTutor)
                     .IsRequired()
-                    .HasMaxLength(15)
+                    .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("GA_TelefonoTutor")
                     .IsFixedLength();
@@ -2682,6 +2894,12 @@ namespace ETL.Data.Sql
                     .WithMany(p => p.GeneralesAlumno)
                     .HasForeignKey(d => d.AlId)
                     .HasConstraintName("FK_GeneralesAlumno_Alumno");
+
+                entity.HasOne(d => d.GaEstadoNavigation)
+                    .WithMany(p => p.GeneralesAlumno)
+                    .HasForeignKey(d => d.GaEstado)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Generales__GA_Es__603D47BB");
 
                 entity.HasOne(d => d.GaMunicipioNavigation)
                     .WithMany(p => p.GeneralesAlumno)
@@ -2895,6 +3113,24 @@ namespace ETL.Data.Sql
                     .HasConstraintName("FK__Grupos__G_Period__36470DEF");
             });
 
+            modelBuilder.Entity<Horarios>(entity =>
+            {
+                entity.HasKey(e => e.HHorarioId)
+                    .HasName("PK__Horarios__18B92BD275E16365");
+
+                entity.Property(e => e.HHorarioId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("H_HorarioID");
+
+                entity.Property(e => e.HHoraFin).HasColumnName("H_HoraFIn");
+
+                entity.Property(e => e.HHoraInicio).HasColumnName("H_HoraInicio");
+
+                entity.Property(e => e.HMinutoFin).HasColumnName("H_MinutoFin");
+
+                entity.Property(e => e.HMinutoInicio).HasColumnName("H_MinutoInicio");
+            });
+
             modelBuilder.Entity<Justificantes>(entity =>
             {
                 entity.HasKey(e => e.JJustificanteId)
@@ -3045,6 +3281,48 @@ namespace ETL.Data.Sql
                     .IsFixedLength();
 
                 entity.Property(e => e.MSemestre).HasColumnName("M_Semestre");
+            });
+
+            modelBuilder.Entity<MateriasImparteDocente>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.MidDocenteId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("MID_DocenteID");
+
+                entity.Property(e => e.MidMateriaId).HasColumnName("MID_MateriaID");
+
+                entity.HasOne(d => d.MidDocente)
+                    .WithMany()
+                    .HasForeignKey(d => d.MidDocenteId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MateriasI__MID_D__3552E9B6");
+
+                entity.HasOne(d => d.MidMateria)
+                    .WithMany()
+                    .HasForeignKey(d => d.MidMateriaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MateriasI__MID_M__10E07F16");
+            });
+
+            modelBuilder.Entity<MediosContacto>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("mediosContacto$");
+
+                entity.Property(e => e.MdDescripcion)
+                    .HasMaxLength(100)
+                    .HasColumnName("MD_Descripcion");
+
+                entity.Property(e => e.MdId).HasColumnName("MD_ID");
+
+                entity.Property(e => e.MdNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("MD_Nombre");
             });
 
             modelBuilder.Entity<MediosDifusion>(entity =>
@@ -3213,6 +3491,12 @@ namespace ETL.Data.Sql
                     .IsUnicode(false)
                     .HasColumnName("Municipios_Nombre")
                     .IsFixedLength();
+
+                entity.HasOne(d => d.MunicipioEstadoNavigation)
+                    .WithMany(p => p.Municipios)
+                    .HasForeignKey(d => d.MunicipioEstado)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Municipio__Munic__7F80E8EA");
             });
 
             modelBuilder.Entity<Nacionalidades>(entity =>
@@ -3581,6 +3865,29 @@ namespace ETL.Data.Sql
                     .HasConstraintName("FK_PlanesEstudio_usuario");
             });
 
+            modelBuilder.Entity<ProgramasCv>(entity =>
+            {
+                entity.HasKey(e => e.IdPrograma)
+                    .HasName("PK_ProgramaCV");
+
+                entity.ToTable("ProgramasCV");
+
+                entity.Property(e => e.MMateriaId).HasColumnName("M_MateriaID");
+
+                entity.Property(e => e.NombrePrograma)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProgramaRegistro).HasColumnType("datetime");
+
+                entity.HasOne(d => d.ProgramaUserNavigation)
+                    .WithMany(p => p.ProgramasCv)
+                    .HasForeignKey(d => d.ProgramaUser)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProgramaCV_usuario");
+            });
+
             modelBuilder.Entity<Puestos>(entity =>
             {
                 entity.Property(e => e.PuestosId)
@@ -3650,7 +3957,7 @@ namespace ETL.Data.Sql
 
                 entity.Property(e => e.RReferencia)
                     .IsRequired()
-                    .HasMaxLength(10)
+                    .HasMaxLength(12)
                     .IsUnicode(false)
                     .HasColumnName("R_Referencia");
 
@@ -3751,6 +4058,11 @@ namespace ETL.Data.Sql
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("UsuarioCV");
+
+                entity.HasOne(d => d.IdProgramaNavigation)
+                    .WithMany(p => p.RegistrosCv)
+                    .HasForeignKey(d => d.IdPrograma)
+                    .HasConstraintName("FK_RegistrosCV_ProgramaCV");
             });
 
             modelBuilder.Entity<Reglamentos>(entity =>

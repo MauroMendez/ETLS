@@ -37,7 +37,11 @@ namespace ETL
                     //string cargaRefe = CargaReferencias();
 
                     // Carga detalle de referencia
-                    string cargaDetRef = CargaDetalleReferencias();
+                    //string cargaDetRef = CargaDetalleReferencias();
+
+
+                    //Carga AlumnoPagos
+                    string addpAGOS = AddPagosAlumno();
 
 
 
@@ -820,32 +824,14 @@ namespace ETL
                                     Console.WriteLine($"error: {e.Message}");
                                     Console.WriteLine("<--------------------------->");
                                 }
-
-
-                                
                             }
-
-
-
-                            
-
-
                         }
-
-
-
-
-
-                        
-
-
-
                         return "Referencias cargadas";
                     }
 
                     string CargaDetalleReferencias()
                     {
-                        List<Etlreferenciasconceptos> detalleRefsv2 = (from DR in npgsql_context.Etlreferenciasconceptos orderby DR.Referenciaid ascending select DR).Take(12).ToList();
+                        List<Etlreferenciasconceptos> detalleRefsv2 = (from DR in npgsql_context.Etlreferenciasconceptos orderby DR.Referenciaid ascending select DR).ToList();
                         int cont = 0;
                         foreach (Etlreferenciasconceptos detRefv2 in detalleRefsv2)
                         {
@@ -909,6 +895,77 @@ namespace ETL
 
 
                         return "Detalles de referencias cargados";
+                    }
+
+
+
+                    string AddPagosAlumno(){
+
+                        List<Etlpago> listPagosv2 = (from P2 in npgsql_context.Etlpago orderby P2.Pagoid ascending select P2).Take(5).ToList();
+                        int cont = 0;
+                        foreach (Etlpago pagov2 in listPagosv2)
+                        {
+                            cont++;
+                            AlumnoPagos pagov3 = new AlumnoPagos();
+                            bool existe = sql_context.AlumnoPagos.Any(a => a.ApPagoId == pagov2.Pagoid);
+
+                            if (existe)
+                            {
+                                Console.WriteLine("Este pago ya existe");
+                                Console.WriteLine("<----------------->");
+                                continue;
+                            }
+
+                            int idCb = 0, idMetodoPago = 0, idFormaPago = 0, idReferencia = 0;
+
+                            pagov3.ApPagoId = (int)pagov2.Pagoid;
+
+
+
+                            if (pagov2.Aluid == 0 || pagov2.Aluid == null || DBNull.Value.Equals(pagov2.Aluid))
+                            {
+                                pagov3.ApAlumnoId = 0;
+                                pagov3.ApAlumnoClave = "";
+                            }
+                            else
+                            {
+                                pagov3.ApAlumnoClave = (from ALU in sql_context.Alumno where ALU.AlId == pagov2.Aluid select ALU.AlMatricula).FirstOrDefault();
+                                pagov3.ApAlumnoId = (long)pagov2.Aluid;
+                            }
+
+
+                            if (pagov2.Pagocbid.Trim() == "" || pagov2.Pagocbid == null || DBNull.Value.Equals(pagov2.Pagocbid))
+                            {
+                                pagov3.ApCuentaBancaria = 0;
+                            }
+                            else
+                            {
+                                if (pagov2.Pagocbid.Trim() == "CCI")
+                                {
+                                    pagov3.ApCuentaBancaria = 1;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "PCR")
+                                {
+
+                                    pagov3.ApCuentaBancaria = 5;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SCBI")
+                                {
+
+                                    pagov3.ApCuentaBancaria = 5;
+                                }
+                            }
+
+
+                            //int idCB = ()
+
+
+                        }
+
+
+
+
+                        return "Alumnos cargados";
                     }
 
                 }

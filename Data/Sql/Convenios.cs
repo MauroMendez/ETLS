@@ -44,6 +44,7 @@ namespace ETL.Data.Sql
         public virtual EstatusList ConEstatusNavigation { get; set; }
         public virtual Convenios ConReferenciaConvenioNavigation { get; set; }
         public virtual CatalogoConvenios ConTipoConvenioNavigation { get; set; }
+        public virtual Estados Estados { get; set; }
         public virtual ICollection<ConvenioHistorico> ConvenioHistorico { get; set; }
         public virtual ICollection<ConvenioParcialidad> ConvenioParcialidad { get; set; }
         public virtual ICollection<DetalleConvenio> DetalleConvenio { get; set; }

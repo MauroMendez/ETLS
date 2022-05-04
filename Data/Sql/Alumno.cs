@@ -9,6 +9,7 @@ namespace ETL.Data.Sql
     {
         public Alumno()
         {
+            AlumnoPagos = new HashSet<AlumnoPagos>();
             BecaAlumno = new HashSet<BecaAlumno>();
             Becaalubitacora = new HashSet<Becaalubitacora>();
             Convenios = new HashSet<Convenios>();
@@ -53,6 +54,7 @@ namespace ETL.Data.Sql
         public virtual Periodos AlPeriodoActualNavigation { get; set; }
         public virtual EstatusList AlStatusActualNavigation { get; set; }
         public virtual StatusHistorial StatusHistorial { get; set; }
+        public virtual ICollection<AlumnoPagos> AlumnoPagos { get; set; }
         public virtual ICollection<BecaAlumno> BecaAlumno { get; set; }
         public virtual ICollection<Becaalubitacora> Becaalubitacora { get; set; }
         public virtual ICollection<Convenios> Convenios { get; set; }

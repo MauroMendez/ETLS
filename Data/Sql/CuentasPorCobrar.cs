@@ -10,7 +10,6 @@ namespace ETL.Data.Sql
         public CuentasPorCobrar()
         {
             CancelacionCuenta = new HashSet<CancelacionCuenta>();
-            DetalleCuentaPorCobrar = new HashSet<DetalleCuentaPorCobrar>();
             InverseCpcReferenciaCuentaNavigation = new HashSet<CuentasPorCobrar>();
         }
 
@@ -35,7 +34,6 @@ namespace ETL.Data.Sql
         public virtual ListaPrecios CpcListaPrecioNavigation { get; set; }
         public virtual CuentasPorCobrar CpcReferenciaCuentaNavigation { get; set; }
         public virtual ICollection<CancelacionCuenta> CancelacionCuenta { get; set; }
-        public virtual ICollection<DetalleCuentaPorCobrar> DetalleCuentaPorCobrar { get; set; }
         public virtual ICollection<CuentasPorCobrar> InverseCpcReferenciaCuentaNavigation { get; set; }
     }
 }

@@ -29,7 +29,6 @@ namespace ETL.Data.Sql
         public long DcpcUsuid { get; set; }
         public DateTime DcpcFechaRegistro { get; set; }
 
-        public virtual CuentasPorCobrar DcpcCuenta { get; set; }
         public virtual EstatusList DcpcEstatusNavigation { get; set; }
         public virtual DetalleCuentaPorCobrar DcpcReferenciaCuentaDetalleNavigation { get; set; }
         public virtual ICollection<DetalleCancelacionPago> DetalleCancelacionPago { get; set; }

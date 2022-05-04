@@ -20,5 +20,6 @@ namespace ETL.Data.Sql
 
         public virtual CancelacionPagos DcCancelacion { get; set; }
         public virtual DetalleCuentaPorCobrar DcCuentaDetalleNavigation { get; set; }
+        public virtual AlumnoPagos DcPago { get; set; }
     }
 }

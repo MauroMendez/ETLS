@@ -24,6 +24,7 @@ namespace ETL.Data.Sql
         public string GaTelefonoCasa { get; set; }
 
         public virtual Alumno Al { get; set; }
+        public virtual Estados GaEstadoNavigation { get; set; }
         public virtual Municipios GaMunicipioNavigation { get; set; }
     }
 }

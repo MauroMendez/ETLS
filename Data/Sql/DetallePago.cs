@@ -18,5 +18,6 @@ namespace ETL.Data.Sql
         public DateTime DpFechaRegistro { get; set; }
 
         public virtual DetalleCuentaPorCobrar DpCuentaDetalleNavigation { get; set; }
+        public virtual AlumnoPagos DpPago { get; set; }
     }
 }

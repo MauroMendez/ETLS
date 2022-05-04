@@ -22,6 +22,7 @@ namespace ETL.Data.Sql
             Modulo = new HashSet<Modulo>();
             MoodleKey = new HashSet<MoodleKey>();
             PlanesEstudio = new HashSet<PlanesEstudio>();
+            ProgramasCv = new HashSet<ProgramasCv>();
             Reglamentos = new HashSet<Reglamentos>();
             Tbusuario = new HashSet<Tbusuario>();
             Tbususesion = new HashSet<Tbususesion>();
@@ -59,6 +60,7 @@ namespace ETL.Data.Sql
         public virtual ICollection<Modulo> Modulo { get; set; }
         public virtual ICollection<MoodleKey> MoodleKey { get; set; }
         public virtual ICollection<PlanesEstudio> PlanesEstudio { get; set; }
+        public virtual ICollection<ProgramasCv> ProgramasCv { get; set; }
         public virtual ICollection<Reglamentos> Reglamentos { get; set; }
         public virtual ICollection<Tbusuario> Tbusuario { get; set; }
         public virtual ICollection<Tbususesion> Tbususesion { get; set; }

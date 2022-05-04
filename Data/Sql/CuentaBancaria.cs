@@ -7,6 +7,11 @@ namespace ETL.Data.Sql
 {
     public partial class CuentaBancaria
     {
+        public CuentaBancaria()
+        {
+            AlumnoPagos = new HashSet<AlumnoPagos>();
+        }
+
         public int CbCuentaId { get; set; }
         public int CbBancoId { get; set; }
         public string CbCuenta { get; set; }
@@ -24,5 +29,6 @@ namespace ETL.Data.Sql
         public virtual Bancos CbBanco { get; set; }
         public virtual Empresas CbEmpresaNavigation { get; set; }
         public virtual ActivoPara ActivoPara { get; set; }
+        public virtual ICollection<AlumnoPagos> AlumnoPagos { get; set; }
     }
 }

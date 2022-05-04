@@ -5,20 +5,22 @@ using System.Collections.Generic;
 
 namespace ETL.Data.Sql
 {
-    public partial class Municipios
+    public partial class Estados
     {
-        public Municipios()
+        public Estados()
         {
+            Convenios = new HashSet<Convenios>();
             DatosFacturacion = new HashSet<DatosFacturacion>();
             GeneralesAlumno = new HashSet<GeneralesAlumno>();
+            Municipios = new HashSet<Municipios>();
         }
 
-        public int MunicipiosId { get; set; }
-        public string MunicipiosNombre { get; set; }
-        public int MunicipioEstado { get; set; }
+        public int EstadosId { get; set; }
+        public string EstadosNombre { get; set; }
 
-        public virtual Estados MunicipioEstadoNavigation { get; set; }
+        public virtual ICollection<Convenios> Convenios { get; set; }
         public virtual ICollection<DatosFacturacion> DatosFacturacion { get; set; }
         public virtual ICollection<GeneralesAlumno> GeneralesAlumno { get; set; }
+        public virtual ICollection<Municipios> Municipios { get; set; }
     }
 }

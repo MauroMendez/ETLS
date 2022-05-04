@@ -17,6 +17,7 @@ namespace ETL.Data.Sql
         public string FUso { get; set; }
         public bool FCancelado { get; set; }
 
+        public virtual AlumnoPagos FPago { get; set; }
         public virtual DatosFacturacion FRfcNavigation { get; set; }
     }
 }

@@ -13,20 +13,21 @@ namespace ETL.Data.NpgSql
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(@"Server = interpue.com.mx; Port = 5435; Database = InterERP; User Id = pruebas; Password = Root.inter19!; Trust Server Certificate=true; Include Error Detail = true;");
-        }
-
         public NpgSql_Context(DbContextOptions<NpgSql_Context> options)
             : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql(@"Server = interpue.com.mx; Port = 5435; Database = InterERP; User Id = pruebas; Password = Root.inter19!; Trust Server Certificate=true; Include Error Detail = true;");
         }
 
         public virtual DbSet<Cclistapreciosconcepto> Cclistapreciosconcepto { get; set; }
         public virtual DbSet<Etlalumno> Etlalumno { get; set; }
         public virtual DbSet<Etlcatalogoconcepto> Etlcatalogoconcepto { get; set; }
         public virtual DbSet<Etlcuentasdetalle> Etlcuentasdetalle { get; set; }
+        public virtual DbSet<Etlpago> Etlpago { get; set; }
         public virtual DbSet<Etlreferencia> Etlreferencia { get; set; }
         public virtual DbSet<Etlreferenciasconceptos> Etlreferenciasconceptos { get; set; }
 
@@ -277,6 +278,67 @@ namespace ETL.Data.NpgSql
                     .HasColumnName("cpimportetotal");
 
                 entity.Property(e => e.Cpnodoc).HasColumnName("cpnodoc");
+            });
+
+            modelBuilder.Entity<Etlpago>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("etlpago");
+
+                entity.Property(e => e.Aluid)
+                    .HasPrecision(18)
+                    .HasColumnName("aluid");
+
+                entity.Property(e => e.Pagoadicional)
+                    .HasMaxLength(500)
+                    .HasColumnName("pagoadicional");
+
+                entity.Property(e => e.Pagocbid)
+                    .HasMaxLength(5)
+                    .HasColumnName("pagocbid")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pagofechabancaria).HasColumnName("pagofechabancaria");
+
+                entity.Property(e => e.Pagofechacontable).HasColumnName("pagofechacontable");
+
+                entity.Property(e => e.Pagofechacreacion).HasColumnName("pagofechacreacion");
+
+                entity.Property(e => e.Pagoid).HasColumnName("pagoid");
+
+                entity.Property(e => e.Pagoimportepend)
+                    .HasPrecision(15, 2)
+                    .HasColumnName("pagoimportepend");
+
+                entity.Property(e => e.Pagoimportetotal)
+                    .HasPrecision(9, 2)
+                    .HasColumnName("pagoimportetotal");
+
+                entity.Property(e => e.Pagometodoid)
+                    .HasMaxLength(5)
+                    .HasColumnName("pagometodoid")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pagona)
+                    .HasMaxLength(20)
+                    .HasColumnName("pagona")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pagorefbancaria)
+                    .HasMaxLength(100)
+                    .HasColumnName("pagorefbancaria")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pagoreferencia)
+                    .HasMaxLength(10)
+                    .HasColumnName("pagoreferencia")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pagotipodoc)
+                    .HasMaxLength(20)
+                    .HasColumnName("pagotipodoc")
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<Etlreferencia>(entity =>
