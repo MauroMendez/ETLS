@@ -1,464 +1,48 @@
 ﻿{
    "CodeGenerationMode": 2,
-   "ContextClassName": "Sql_Context",
+   "ContextClassName": "NpgSql_Context",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": null,
-   "OutputPath": "Data\/Sql",
+   "OutputPath": "Data\/NpgSql",
    "ProjectRootNamespace": "ETL",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[ActivoPara]",
+         "Name": "public.cclistapreciosconcepto",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Administrativos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Alergias]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Alumno]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[AlumnoPagos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[AlumnoPO]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Areas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Bancos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[becaalubitacora]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[becaAlumno]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Becas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[BitacoraDetalle]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[BitacoraGral]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[campana]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[campanameta]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CancelacionCuenta]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CancelacionPagos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Carreras]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CatalogoCancelacion]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CatalogoConceptos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CatalogoConvenios]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CatalogoSaltoPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Categoriabeca]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ConfiguracionCorreo]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ConfiguracionPagos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Consulta]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ContactoProspecto]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ConvenioHistorico]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ConvenioParcialidad]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Convenios]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CuentaBancaria]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CuentasPorCobrar]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DatosFacturacion]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DatosMedicos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DetalleCancelacionPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DetalleConvenio]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DetalleCuentaPorCobrar]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DetalleEsquema]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DetallePago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DetalleReferencia]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DocumentoAlumno]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DocumentoBitacora]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Documentos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DocumentosGenerales]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DocumentosNivel]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Edificios]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Empresas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Escuelas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Escuelasf]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[EsquemaPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[EsquemaPagoHistorial]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Estados]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[EstatusList]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Facturas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Facultades]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[FaltasClase]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ferias]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[FirmaReglamentosCV]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Folio]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[FormaPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[FormaPagoTxt]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[GeneralesAdministrativos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[GeneralesAlumno]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[GeneralesProspecto]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Grupos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Horarios]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Justificantes]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ListaPrecios]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Materias]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[MateriasImparteDocente]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[mediosContacto$]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[MediosDifusion]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[MetodoPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Modalidades]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Modulo]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Momento]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[MoodleKey]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Municipios]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Nacionalidades]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Niveles]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Noticias]",
-         "ObjectType": 0
+         "Name": "public.etlcatalogoconcepto",
+         "ObjectType": 3
       },
       {
-         "Name": "[dbo].[PagoTarjeta]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[pantalla]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Periodos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Permisos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[PermisosAlumnos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[PlanesEstudio]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ProgramasCV]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Puestos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Referencias]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[RegistroChecador]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[RegistrosCV]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Reglamentos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[rol]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Salones]",
-         "ObjectType": 0
+         "Name": "public.etlalumno",
+         "ObjectType": 3
       },
       {
-         "Name": "[dbo].[Seguimiento]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[SolicitudPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[StatusHistorial]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[StatusPago]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TBusuario]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TBususesion]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TipoBajaAlumno]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TipoCalificaciones]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TipoPagoAdmin]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TipoPersonas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TiposDocumentos]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TipoSeguimiento]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[TiposJustificante]",
-         "ObjectType": 0
+         "Name": "public.etlreferenciasconceptos",
+         "ObjectType": 3
       },
       {
-         "Name": "[dbo].[Tpermisos]",
-         "ObjectType": 0
+         "Name": "public.etlpago",
+         "ObjectType": 3
       },
       {
-         "Name": "[dbo].[UsosFacturacion]",
-         "ObjectType": 0
+         "Name": "public.etlreferencia",
+         "ObjectType": 3
       },
       {
-         "Name": "[dbo].[usuario]",
-         "ObjectType": 0
+         "Name": "public.etlcuentasdetalle",
+         "ObjectType": 3
       }
    ],
-   "UiHint": "VMC891B78.InterERPv3TestETL",
+   "UiHint": "InterErpPostgresql",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

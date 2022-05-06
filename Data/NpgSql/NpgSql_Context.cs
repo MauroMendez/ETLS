@@ -13,14 +13,15 @@ namespace ETL.Data.NpgSql
         {
         }
 
-        public NpgSql_Context(DbContextOptions<NpgSql_Context> options)
-            : base(options)
-        {
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(@"Server = interpue.com.mx; Port = 5435; Database = InterERP; User Id = pruebas; Password = Root.inter19!; Trust Server Certificate=true; Include Error Detail = true;");
+        }
+
+        public NpgSql_Context(DbContextOptions<NpgSql_Context> options)
+            : base(options)
+        {
         }
 
         public virtual DbSet<Cclistapreciosconcepto> Cclistapreciosconcepto { get; set; }
@@ -289,6 +290,10 @@ namespace ETL.Data.NpgSql
                 entity.Property(e => e.Aluid)
                     .HasPrecision(18)
                     .HasColumnName("aluid");
+
+                entity.Property(e => e.Estatus)
+                    .HasPrecision(1)
+                    .HasColumnName("estatus");
 
                 entity.Property(e => e.Pagoadicional)
                     .HasMaxLength(500)

@@ -761,7 +761,7 @@ namespace ETL
                     string CargaReferencias()
                     {
                         // consulta de referencias && REF2.Referenciaid == "0000786 101"
-                        List<Etlreferencia> referenciasv2 = (from REF2 in npgsql_context.Etlreferencia where REF2.Referenciaid != ""  orderby REF2.Referenciaid select REF2).ToList();
+                        List<Etlreferencia> referenciasv2 = (from REF2 in npgsql_context.Etlreferencia where REF2.Referenciaid != "" orderby REF2.Referenciaid select REF2).ToList();
                         int cont = 0;
                         // foreach de la vista
                         foreach (Etlreferencia refv2 in referenciasv2)
@@ -856,7 +856,7 @@ namespace ETL
                             {
                                 detalleReferencia.DrCuentaDetalle = (int)detRefv2.Cpid;
                             }
-                            
+
                             if (detRefv2.Refmonto == 0 || detRefv2.Refmonto == null || DBNull.Value.Equals(detRefv2.Refmonto))
                             {
                                 detalleReferencia.DrMontoAplicado = 0;
@@ -886,7 +886,7 @@ namespace ETL
                             }
 
 
-                            
+
 
 
                         }
@@ -899,7 +899,8 @@ namespace ETL
 
 
 
-                    string AddPagosAlumno(){
+                    string AddPagosAlumno()
+                    {
 
                         List<Etlpago> listPagosv2 = (from P2 in npgsql_context.Etlpago orderby P2.Pagoid ascending select P2).Take(5).ToList();
                         int cont = 0;
@@ -949,32 +950,197 @@ namespace ETL
 
                                     pagov3.ApCuentaBancaria = 5;
                                 }
-                                else if (pagov2.Pagocbid.Trim() == "SCBI")
+                                else if (pagov2.Pagocbid.Trim() == "SCB1")
                                 {
-
                                     pagov3.ApCuentaBancaria = 5;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SCO")
+                                {
+                                    pagov3.ApCuentaBancaria = 6;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SN1")
+                                {
+                                    pagov3.ApCuentaBancaria = 7;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SN2")
+                                {
+                                    pagov3.ApCuentaBancaria = 9;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SN3")
+                                {
+                                    pagov3.ApCuentaBancaria = 10;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SNO")
+                                {
+                                    pagov3.ApCuentaBancaria = 12;
+                                }
+                                else if (pagov2.Pagocbid.Trim() == "SVE")
+                                {
+                                    pagov3.ApCuentaBancaria = 13;
                                 }
                             }
 
 
                             //int idCB = ()
+                            if (pagov2.Pagotipodoc.Trim() == "" || pagov2.Pagotipodoc == null || DBNull.Value.Equals(pagov2.Pagotipodoc))
+                            {
+
+                                pagov3.ApMetodoPago = 0;
+                            }
+                            else
+                            {
+                                string tipoDoc = pagov2.Pagotipodoc.Trim();
+
+
+                                switch (tipoDoc)
+                                {
+                                    case "PB":
+                                        pagov3.ApMetodoPago = 2;
+                                        break;
+
+                                    case "PO":
+                                        pagov3.ApMetodoPago = 1;
+                                        break;
+
+                                    case "RB":
+                                        pagov3.ApMetodoPago = 3;
+                                        break;
+                                    default:
+                                        pagov3.ApMetodoPago = 0;
+                                        break;
+                                }
+
+
+                            }
+
+                            if (pagov2.Pagometodoid.Trim() == "" || pagov2.Pagometodoid == null || DBNull.Value.Equals(pagov2.Pagometodoid))
+                            {
+                                pagov3.ApFormaPagoId = 0;
+                            }
+                            else
+                            {
+                                string FormaPago = pagov2.Pagometodoid.Trim();
+                                switch (FormaPago)
+                                {
+                                    case "BNS":
+                                        pagov3.ApFormaPagoId = 1;
+                                        break;
+                                    case "CHQ":
+                                        pagov3.ApFormaPagoId = 2;
+                                        break;
+                                    case "DEF":
+                                        pagov3.ApFormaPagoId = 3;
+                                        break;
+                                    case "EFC":
+                                        pagov3.ApFormaPagoId = 4;
+                                        break;
+                                    case "MSC":
+                                        pagov3.ApFormaPagoId = 5;
+                                        break;
+                                    case "OXXO":
+                                        pagov3.ApFormaPagoId = 6;
+                                        break;
+                                    case "SEVEN":
+                                        pagov3.ApFormaPagoId = 7;
+                                        break;
+                                    case "SPEI":
+                                        pagov3.ApFormaPagoId = 8;
+                                        break;
+                                    case "TCR":
+                                        pagov3.ApFormaPagoId = 9;
+                                        break;
+                                    case "TDB":
+                                        pagov3.ApFormaPagoId = 10;
+                                        break;
+                                    case "TEL":
+                                        pagov3.ApFormaPagoId = 11;
+                                        break;
+                                    case "VISA":
+                                        pagov3.ApFormaPagoId = 12;
+                                        break;
+
+                                    default:
+                                        pagov3.ApFormaPagoId = 0;
+                                        break;
+                                }
+                            }
+
+                            pagov3.ApMoneda = 1;
+                            pagov3.ApImportePendiente = (pagov2.Pagoimportepend == null || DBNull.Value.Equals(pagov2.Pagoimportepend)) ? 0 : (decimal)pagov2.Pagoimportepend;
+                            pagov3.ApImporteTotal = (pagov2.Pagoimportetotal == null || DBNull.Value.Equals(pagov2.Pagoimportetotal)) ? 0 : (decimal)pagov2.Pagoimportetotal;
+
+                            if (pagov2.Pagoreferencia.Trim() == "" || pagov2.Pagoreferencia == null || DBNull.Value.Equals(pagov2.Pagoreferencia))
+                            {
+                                pagov3.ApReferencia = "";
+                                pagov3.ApReferenciaId = 0;
+                            }else
+                            {
+                                pagov3.ApReferencia = pagov2.Pagoreferencia.Trim();
+                                int idRef = (int)(from refe in sql_context.Referencias where refe.RReferencia == pagov2.Pagoreferencia.Trim() select refe.RReferenciaId).FirstOrDefault();
+                                pagov3.ApReferenciaId = (DBNull.Value.Equals(idRef)) ? 0 : idRef;
+                            }
+
+                            pagov3.ApReferenciaBancaria = (pagov2.Pagorefbancaria.Trim() == "" || pagov2.Pagorefbancaria == null || DBNull.Value.Equals(pagov2.Pagorefbancaria)) ? "" : pagov2.Pagorefbancaria;
+                            pagov3.ApNoAprobacion = (pagov2.Pagona.Trim() == "" || pagov2.Pagona == null || DBNull.Value.Equals(pagov2.Pagona)) ? "" : pagov2.Pagona;
+
+                            if (pagov2.Pagofechacreacion == null || DBNull.Value.Equals(pagov2.Pagofechacreacion))
+                            {
+                                pagov3.ApFechaCreacion = DateTime.MinValue;
+                                pagov3.ApFechaRegistro = DateTime.MinValue;
+                            }else
+                            {
+                                pagov3.ApFechaRegistro = (DateTime)pagov2.Pagofechacreacion;
+                                pagov3.ApFechaCreacion = (DateTime)pagov2.Pagofechacreacion;
+
+                            }
+                            
+                            if (pagov2.Pagofechacontable == null || DBNull.Value.Equals(pagov2.Pagofechacontable))
+                            {
+                                pagov3.ApFechaContable = DateTime.MinValue;
+                            }
+                            else 
+                            {
+                                pagov3.ApFechaContable = (DateTime)pagov2.Pagofechacontable;
+                            }
+                            
+                            if (pagov2.Pagofechabancaria == null || DBNull.Value.Equals(pagov2.Pagofechabancaria))
+                            {
+                                pagov3.ApFechaBancaria = DateTime.MinValue;
+                            }
+                            else 
+                            {
+                                pagov3.ApFechaBancaria = (DateTime)pagov2.Pagofechabancaria;
+                            }
+
+                            pagov3.ApObservaciones = (pagov2.Pagoadicional.Trim() == "" || pagov2.Pagoadicional == null || DBNull.Value.Equals(pagov2.Pagoadicional)) ? "" : pagov2.Pagoadicional;
+                            pagov3.ApEstatus = (pagov2.Estatus == 1) ? 24 : 26;
+                            pagov3.ApUsuid = 9;
+
+                            try
+                            {
+                                sql_context.AlumnoPagos.Add(pagov3);
+                                sql_context.SaveChanges();
+                                Console.WriteLine("Pago registrado");
+                                Console.WriteLine("<------------->");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("ERROR: " + e.Message);
+                                Console.WriteLine("<----------------->");
+                            }
 
 
                         }
-
-
-
-
                         return "Alumnos cargados";
+
                     }
 
                 }
 
+
+
+
             }
-
-
-
-
         }
     }
 }

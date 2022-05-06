@@ -21,5 +21,6 @@ namespace ETL.Data.NpgSql
         public DateTime? Pagofechacontable { get; set; }
         public DateTime? Pagofechabancaria { get; set; }
         public string Pagoadicional { get; set; }
+        public decimal? Estatus { get; set; }
     }
 }
