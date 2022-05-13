@@ -41,7 +41,10 @@ namespace ETL
 
 
                     //Carga AlumnoPagos
-                    string addpAGOS = AddPagosAlumno();
+                    //string addpAGOS = AddPagosAlumno();
+
+                    //Carga detalle de pagos
+                    string addDetallePago = CargaDetallePagos();
 
 
 
@@ -897,12 +900,10 @@ namespace ETL
                         return "Detalles de referencias cargados";
                     }
 
-
-
                     string AddPagosAlumno()
                     {
 
-                        List<Etlpago> listPagosv2 = (from P2 in npgsql_context.Etlpago orderby P2.Pagoid ascending select P2).Take(5).ToList();
+                        List<Etlpago> listPagosv2 = (from P2 in npgsql_context.Etlpago where P2.Pagoid > 103780 orderby P2.Pagoid ascending select P2).ToList();
                         int cont = 0;
                         foreach (Etlpago pagov2 in listPagosv2)
                         {
@@ -935,7 +936,7 @@ namespace ETL
                             }
 
 
-                            if (pagov2.Pagocbid.Trim() == "" || pagov2.Pagocbid == null || DBNull.Value.Equals(pagov2.Pagocbid))
+                            if (pagov2.Pagocbid == null ||  pagov2.Pagocbid.Trim() == "" || DBNull.Value.Equals(pagov2.Pagocbid))
                             {
                                 pagov3.ApCuentaBancaria = 0;
                             }
@@ -982,7 +983,7 @@ namespace ETL
 
 
                             //int idCB = ()
-                            if (pagov2.Pagotipodoc.Trim() == "" || pagov2.Pagotipodoc == null || DBNull.Value.Equals(pagov2.Pagotipodoc))
+                            if (pagov2.Pagotipodoc == null || pagov2.Pagotipodoc.Trim() == "" ||  DBNull.Value.Equals(pagov2.Pagotipodoc))
                             {
 
                                 pagov3.ApMetodoPago = 0;
@@ -1013,7 +1014,7 @@ namespace ETL
 
                             }
 
-                            if (pagov2.Pagometodoid.Trim() == "" || pagov2.Pagometodoid == null || DBNull.Value.Equals(pagov2.Pagometodoid))
+                            if (pagov2.Pagometodoid == null || pagov2.Pagometodoid.Trim() == "" ||  DBNull.Value.Equals(pagov2.Pagometodoid))
                             {
                                 pagov3.ApFormaPagoId = 0;
                             }
@@ -1069,7 +1070,7 @@ namespace ETL
                             pagov3.ApImportePendiente = (pagov2.Pagoimportepend == null || DBNull.Value.Equals(pagov2.Pagoimportepend)) ? 0 : (decimal)pagov2.Pagoimportepend;
                             pagov3.ApImporteTotal = (pagov2.Pagoimportetotal == null || DBNull.Value.Equals(pagov2.Pagoimportetotal)) ? 0 : (decimal)pagov2.Pagoimportetotal;
 
-                            if (pagov2.Pagoreferencia.Trim() == "" || pagov2.Pagoreferencia == null || DBNull.Value.Equals(pagov2.Pagoreferencia))
+                            if (pagov2.Pagoreferencia == null || pagov2.Pagoreferencia.Trim() == "" ||  DBNull.Value.Equals(pagov2.Pagoreferencia))
                             {
                                 pagov3.ApReferencia = "";
                                 pagov3.ApReferenciaId = 0;
@@ -1080,13 +1081,17 @@ namespace ETL
                                 pagov3.ApReferenciaId = (DBNull.Value.Equals(idRef)) ? 0 : idRef;
                             }
 
-                            pagov3.ApReferenciaBancaria = (pagov2.Pagorefbancaria.Trim() == "" || pagov2.Pagorefbancaria == null || DBNull.Value.Equals(pagov2.Pagorefbancaria)) ? "" : pagov2.Pagorefbancaria;
-                            pagov3.ApNoAprobacion = (pagov2.Pagona.Trim() == "" || pagov2.Pagona == null || DBNull.Value.Equals(pagov2.Pagona)) ? "" : pagov2.Pagona;
+                            pagov3.ApReferenciaBancaria = (pagov2.Pagorefbancaria == null || pagov2.Pagorefbancaria.Trim() == "" ||  DBNull.Value.Equals(pagov2.Pagorefbancaria)) ? "" : pagov2.Pagorefbancaria.Trim();
+                            pagov3.ApNoAprobacion = (pagov2.Pagona == null || pagov2.Pagona.Trim() == "" ||  DBNull.Value.Equals(pagov2.Pagona)) ? "" : pagov2.Pagona;
 
-                            if (pagov2.Pagofechacreacion == null || DBNull.Value.Equals(pagov2.Pagofechacreacion))
+
+                            //string DateTry = "061/01/1000";
+                            DateTime DateTry = Convert.ToDateTime("01/01/1000");
+
+                            if (pagov2.Pagofechacreacion == null || DBNull.Value.Equals(pagov2.Pagofechacreacion) || pagov2.Pagofechacreacion == DateTry)
                             {
-                                pagov3.ApFechaCreacion = DateTime.MinValue;
-                                pagov3.ApFechaRegistro = DateTime.MinValue;
+                                pagov3.ApFechaCreacion = DateTime.Now;
+                                pagov3.ApFechaRegistro = DateTime.Now;
                             }else
                             {
                                 pagov3.ApFechaRegistro = (DateTime)pagov2.Pagofechacreacion;
@@ -1094,25 +1099,28 @@ namespace ETL
 
                             }
                             
-                            if (pagov2.Pagofechacontable == null || DBNull.Value.Equals(pagov2.Pagofechacontable))
+                            if (pagov2.Pagofechacontable == null || DBNull.Value.Equals(pagov2.Pagofechacontable) || pagov2.Pagofechacontable == DateTry)
                             {
-                                pagov3.ApFechaContable = DateTime.MinValue;
+                                pagov3.ApFechaContable = DateTime.Now;
                             }
                             else 
                             {
                                 pagov3.ApFechaContable = (DateTime)pagov2.Pagofechacontable;
                             }
                             
-                            if (pagov2.Pagofechabancaria == null || DBNull.Value.Equals(pagov2.Pagofechabancaria))
+                            if (pagov2.Pagofechabancaria == null || DBNull.Value.Equals(pagov2.Pagofechabancaria) || pagov2.Pagofechabancaria == DateTry)
                             {
-                                pagov3.ApFechaBancaria = DateTime.MinValue;
+
+
+
+                                pagov3.ApFechaBancaria = DateTime.Now;
                             }
                             else 
                             {
                                 pagov3.ApFechaBancaria = (DateTime)pagov2.Pagofechabancaria;
                             }
 
-                            pagov3.ApObservaciones = (pagov2.Pagoadicional.Trim() == "" || pagov2.Pagoadicional == null || DBNull.Value.Equals(pagov2.Pagoadicional)) ? "" : pagov2.Pagoadicional;
+                            pagov3.ApObservaciones = (pagov2.Pagoadicional == null || pagov2.Pagoadicional.Trim() == "" ||  DBNull.Value.Equals(pagov2.Pagoadicional)) ? "" : pagov2.Pagoadicional.Trim();
                             pagov3.ApEstatus = (pagov2.Estatus == 1) ? 24 : 26;
                             pagov3.ApUsuid = 9;
 
@@ -1135,6 +1143,17 @@ namespace ETL
 
                     }
 
+
+
+
+                    string CargaDetallePagos()
+                    {
+
+
+
+
+                        return "Detalles de pagos cargados";
+                    }
                 }
 
 
